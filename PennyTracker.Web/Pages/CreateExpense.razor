@@ -1,0 +1,21 @@
+﻿@page "/createExpense/{Id}"
+
+@using PennyTracker.Web.Data
+
+<Radzen.Blazor.RadzenCard>
+    <RadzenTextBox Placeholder="Description" Style="margin-bottom: 20px" @bind-Value="this.model.Description"/>
+    <RadzenNumeric Placeholder="Amount" Style="margin-bottom: 20px" @bind-Value="this.model.Amount" />
+</Radzen.Blazor.RadzenCard>
+
+@code
+{
+    private Expense model;
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.model = new Expense();
+    }
+}

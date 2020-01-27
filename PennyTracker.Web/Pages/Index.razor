@@ -1,0 +1,37 @@
+﻿@page "/"
+
+@using PennyTracker.Web.Data
+@using PennyTracker.ViewModels
+
+<h2>Penny Tracker</h2>
+
+<Radzen.Blazor.RadzenButton Text="Add"
+                            Click="async args => await ViewModel.OnButtonAddClickAsync()"
+                            ButtonStyle="ButtonStyle.Primary">
+
+</Radzen.Blazor.RadzenButton>
+
+<RadzenGrid Data="@this.ViewModel.All" AllowSorting="true">
+    <Columns>
+        <RadzenGridColumn TItem="Expense" Property="Description" Title="Description" Width="300px" Type="string" />
+        <RadzenGridColumn TItem="Expense" Property="SpentDate" Title="Date" Width="300px" />
+        <RadzenGridColumn TItem="Expense" Property="Amount" Title="Amount" Width="100px" Type="number" />
+        <RadzenGridColumn TItem="Expense" Width="100px" Filterable="false">
+            <Template Context="ctx">
+                <RadzenButton Text="Edit" ButtonStyle="ButtonStyle.Info" Click="(s) => ViewModel.OnButtonEditClick(ctx.Id)"></RadzenButton>
+            </Template>
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="Expense" Width="100px" Filterable="false">
+            <Template Context="ctx">
+                <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Click="(s) => ViewModel.OnButtonDeleteClick(ctx.Id)"></RadzenButton>
+            </Template>
+        </RadzenGridColumn>
+
+    </Columns>
+</RadzenGrid>
+
+
+@code{
+    [Inject]
+    public IIndexViewModel ViewModel { get; set; }
+}
