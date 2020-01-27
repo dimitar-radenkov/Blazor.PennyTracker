@@ -36,7 +36,7 @@ namespace PennyTracker.ViewModels
         {
             await this.dialogService.OpenAsync<CreateExpense>(
                 title: "Create New Expense",
-                options: new DialogOptions() { Width = "auto", Height = "auto"}) ;
+                options: new DialogOptions() { Width = "500px", Height = "auto"}) ;
         }
 
         public void OnButtonEditClick(int id)

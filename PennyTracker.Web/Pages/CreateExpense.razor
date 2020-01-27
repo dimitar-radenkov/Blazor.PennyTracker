@@ -2,10 +2,26 @@
 
 @using PennyTracker.Web.Data
 
-<Radzen.Blazor.RadzenCard>
-    <RadzenTextBox Placeholder="Description" Style="margin-bottom: 20px" @bind-Value="this.model.Description"/>
-    <RadzenNumeric Placeholder="Amount" Style="margin-bottom: 20px" @bind-Value="this.model.Amount" />
-</Radzen.Blazor.RadzenCard>
+    <Radzen.Blazor.RadzenCard>
+        <h4>Category</h4>
+        <RadzenDropDown TValue="int" Data="Enum.GetValues(typeof(Category))" SelectedItem="Category.Auto" />
+        <br />
+
+        <h4>Description</h4>
+        <RadzenTextBox Placeholder="Description" Style="margin-bottom: 20px" @bind-Value="this.model.Description" />
+        <br />
+
+        <h4>Amount</h4>
+        <RadzenNumeric TValue="decimal" Placeholder="Amount" Style="margin-bottom: 20px" @bind-Value="this.model.Amount" />
+        <br />
+
+        <h4>Date</h4>
+        <RadzenDatePicker @bind-Value="this.model.SpentDate" />
+        <br />
+
+        <Radzen.Blazor.RadzenButton ButtonStyle="ButtonStyle.Success" Text="Ok" Style="margin:5px" />
+        <Radzen.Blazor.RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Cancel" Style="margin:5px" />
+    </Radzen.Blazor.RadzenCard>
 
 @code
 {
@@ -16,6 +32,6 @@
 
     protected override void OnInitialized()
     {
-        this.model = new Expense();
+        this.model = new Expense { SpentDate = DateTime.UtcNow };
     }
 }
