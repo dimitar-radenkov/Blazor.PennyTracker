@@ -8,7 +8,9 @@
                 <RadzenLabel Text="Category"></RadzenLabel>
             </div>
             <div class="col-md-8">
-                <RadzenDropDown Placeholder="Category" Data="Enum.GetValues(typeof(Category))" SelectedItem="Category.Grocery" @bind-Value="this.model.Category" Style="width:100%" />
+                <RadzenDropDown Placeholder="Category" Data="Enum.GetValues(typeof(Category))" 
+                                SelectedItem="Category.Grocery" 
+                                @bind-Value="this.model.Category" Style="width:100%" />
             </div>
         </div>
 
@@ -61,7 +63,7 @@
 
     private void OnButtonSaveClicked()
     {
-
+        
     }
 
     private void OnButtonCancelClicked()

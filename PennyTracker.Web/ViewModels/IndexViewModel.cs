@@ -8,7 +8,6 @@ using Radzen;
 
 namespace PennyTracker.ViewModels
 {
-
     public interface IIndexViewModel
     {
         IEnumerable<Expense> All { get; }
