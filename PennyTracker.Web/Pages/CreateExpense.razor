@@ -2,10 +2,50 @@
 
 @using PennyTracker.Web.Data
 
-<Radzen.Blazor.RadzenCard>
-    <RadzenTextBox Placeholder="Description" Style="margin-bottom: 20px" @bind-Value="this.model.Description"/>
-    <RadzenNumeric Placeholder="Amount" Style="margin-bottom: 20px" @bind-Value="this.model.Amount" />
-</Radzen.Blazor.RadzenCard>
+    <RadzenCard>
+        <div class="row" style="margin:5px">
+            <div class="col-md-4">
+                <RadzenLabel Text="Category"></RadzenLabel>
+            </div>
+            <div class="col-md-8">
+                <RadzenDropDown Placeholder="Category" Data="Enum.GetValues(typeof(Category))" SelectedItem="Category.Grocery" @bind-Value="this.model.Category" Style="width:100%" />
+            </div>
+        </div>
+
+        <div class="row" style="margin:5px">
+            <div class="col-md-4">
+                <RadzenLabel Text="Amount"></RadzenLabel>
+            </div>
+            <div class="col-md-8">
+                <RadzenNumeric Placeholder="Amount" @bind-Value="this.model.Amount" Style="width:100%" />
+            </div>
+        </div>
+
+        <div class="row" style="margin:5px">
+            <div class="col-md-4">
+                <RadzenLabel Text="Description"></RadzenLabel>
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox Placeholder="Description" @bind-Value="this.model.Description" Style="width:100%" />
+            </div>
+        </div>
+
+        <div class="row" style="margin:5px">
+            <div class="col-md-4">
+                <RadzenLabel Text="Date"></RadzenLabel>
+            </div>
+            <div class="col-md-8">
+                <RadzenDatePicker Placeholder="Date" @bind-Value="this.model.SpentDate" Style="width:100%" />
+            </div>
+        </div>
+
+        <div class="row" style="margin:5px">
+            <div class="col-md-8 offset-4 d-flex justify-content-md-end">
+                <RadzenButton Text="Save" Click="this.OnButtonSaveClicked" ButtonStyle="ButtonStyle.Primary " Style="margin-right:5px"/>
+                <RadzenButton Text="Cancel" Click="this.OnButtonCancelClicked" ButtonStyle="ButtonStyle.Secondary" />
+            </div>
+        </div>
+    </RadzenCard>
 
 @code
 {
@@ -16,6 +56,16 @@
 
     protected override void OnInitialized()
     {
-        this.model = new Expense();
+        this.model = new Expense { SpentDate = DateTime.UtcNow };
+    }
+
+    private void OnButtonSaveClicked()
+    {
+
+    }
+
+    private void OnButtonCancelClicked()
+    {
+
     }
 }
