@@ -3,15 +3,21 @@
 @using PennyTracker.Web.Data
 @using PennyTracker.Web.ViewModels
 
-    <RadzenCard>
+    <RadzenTemplateForm TItem="Expense" Data="this.ViewModel.Model" 
+                        Submit="(x) => this.ViewModel.OnButtonSaveClicked()">
         <div class="row" style="margin:5px">
             <div class="col-md-4">
                 <RadzenLabel Text="Category"></RadzenLabel>
             </div>
             <div class="col-md-8">
-                <RadzenDropDown Placeholder="Category" Data="Enum.GetValues(typeof(Category))" 
-                                SelectedItem="Category.Grocery" 
-                                @bind-Value="this.ViewModel.Model.Category" Style="width:100%" />
+                <div class="row">
+                    <RadzenDropDown Placeholder="Category" 
+                                    Data="Enum.GetValues(typeof(Category))"
+                                    SelectedItem="Category.Grocery"
+                                    @bind-Value="this.ViewModel.Model.Category"
+                                    Style="width:100%"/>
+                </div>
+                <div class="row" style="height:20px"></div>
             </div>
         </div>
 
@@ -20,7 +26,16 @@
                 <RadzenLabel Text="Amount"></RadzenLabel>
             </div>
             <div class="col-md-8">
-                <RadzenNumeric Placeholder="Amount" @bind-Value="this.ViewModel.Model.Amount" Style="width:100%" />
+                <div class="row">
+                    <RadzenNumeric Name="Amount"
+                                   Placeholder="Amount" 
+                                   @bind-Value="this.ViewModel.Model.Amount"
+                                   Style="width:100%" />
+                </div>
+                <div class="row" style="height:20px">
+                    <RadzenRequiredValidator Component="Amount" Text="Amount is required" />
+                    <RadzenNumericRangeValidator Component="Amount" Min="1" Max="1000000" Text="Amount must be between 1 and 1 000 000" />
+                </div>             
             </div>
         </div>
 
@@ -29,7 +44,15 @@
                 <RadzenLabel Text="Description"></RadzenLabel>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox Placeholder="Description" @bind-Value="this.ViewModel.Model.Description" Style="width:100%" />
+                <div class="row">
+                    <RadzenTextBox Name="Description" 
+                                   Placeholder="Description"
+                                   @bind-Value="this.ViewModel.Model.Description"
+                                   Style="width:100%;" />
+                </div>
+                <div class="row" style="height:20px">
+                    <RadzenRequiredValidator Component="Description" Text="Description is required" />
+                </div>
             </div>
         </div>
 
@@ -38,20 +61,26 @@
                 <RadzenLabel Text="Date"></RadzenLabel>
             </div>
             <div class="col-md-8">
-                <RadzenDatePicker Placeholder="Date" @bind-Value="this.ViewModel.Model.SpentDate" Style="width:100%" />
+                <div class="row">
+                    <RadzenDatePicker Name="Date"
+                                      Placeholder="Date"
+                                      @bind-Value="this.ViewModel.Model.SpentDate"
+                                      Style="width:100%" />
+                </div>
+                <div class="row" style="height:20px"></div>
             </div>
         </div>
 
         <div class="row" style="margin:5px">
             <div class="col-md-8 offset-4 d-flex justify-content-md-end">
-                <RadzenButton Text="Save" Click="this.ViewModel.OnButtonSaveClicked" ButtonStyle="ButtonStyle.Primary " Style="margin-right:5px"/>
+                <RadzenButton Text="Save" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary " Style="margin-right:5px"/>
                 <RadzenButton Text="Cancel" Click="this.ViewModel.OnButtonCancelClicked" ButtonStyle="ButtonStyle.Secondary" />
             </div>
         </div>
-    </RadzenCard>
+    </RadzenTemplateForm>
 
 @code
 {
     [Inject]
-    public ICreateExpenseViewModel ViewModel { get; set; }
+    public ICreateExpenseViewModel ViewModel { get; set; }  
 }
