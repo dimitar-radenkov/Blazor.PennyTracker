@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using PennyTracker.Web.Data;
+using PennyTracker.Web.Services;
 using PennyTracker.Web.ViewModels;
+
 using Radzen;
 
 namespace PennyTracker.Web
@@ -28,6 +30,8 @@ namespace PennyTracker.Web
             services.AddSingleton<IExpenseService, ExpenseService>();
 
             services.AddScoped<DialogService>();
+            services.AddScoped<IDialogService, AppDialogService>();
+
             services.AddScoped<NotificationService>();
             services.AddScoped<IIndexViewModel, IndexViewModel>();
             services.AddScoped<ICreateExpenseViewModel, CreateExpenseViewModel>();

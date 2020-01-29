@@ -1,7 +1,7 @@
 ﻿using System;
-using PennyTracker.Web.Data;
 
-using Radzen;
+using PennyTracker.Web.Data;
+using PennyTracker.Web.Services;
 
 namespace PennyTracker.Web.ViewModels
 {
@@ -16,12 +16,12 @@ namespace PennyTracker.Web.ViewModels
 
     public class CreateExpenseViewModel : ICreateExpenseViewModel
     {
-        private readonly DialogService dialogService;
+        private readonly IDialogService dialogService;
         private readonly IExpenseService expenseService;
 
         public Expense Model { get; set; }
     
-        public CreateExpenseViewModel(DialogService dialogService, IExpenseService expenseService)
+        public CreateExpenseViewModel(IDialogService dialogService, IExpenseService expenseService)
         {
             this.dialogService = dialogService;
             this.expenseService = expenseService;

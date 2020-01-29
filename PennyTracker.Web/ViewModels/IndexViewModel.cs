@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using PennyTracker.Web.Data;
+﻿using PennyTracker.Web.Data;
 using PennyTracker.Web.Pages;
+using PennyTracker.Web.Services;
 
 using Radzen;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PennyTracker.Web.ViewModels
 {
     public interface IIndexViewModel
     {
         IEnumerable<Expense> All { get; }
-
         Task OnButtonAddClickAsync();
         void OnButtonEditClick(int id);
         void OnButtonDeleteClick(int id);
@@ -21,14 +21,14 @@ namespace PennyTracker.Web.ViewModels
     {
         private readonly IExpenseService expenseService;
         private readonly NotificationService notificationService;
-        private readonly DialogService dialogService;
+        private readonly IDialogService dialogService;
 
         public IEnumerable<Expense> All => this.expenseService.All;
 
         public IndexViewModel(
             IExpenseService expenseService, 
             NotificationService notificationService,
-            DialogService dialogService)
+            IDialogService dialogService)
         {
             this.expenseService = expenseService;
             this.notificationService = notificationService;
