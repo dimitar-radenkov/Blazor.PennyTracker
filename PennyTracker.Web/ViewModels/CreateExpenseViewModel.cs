@@ -17,17 +17,22 @@ namespace PennyTracker.Web.ViewModels
     public class CreateExpenseViewModel : ICreateExpenseViewModel
     {
         private readonly DialogService dialogService;
+        private readonly IExpenseService expenseService;
 
         public Expense Model { get; set; }
     
-        public CreateExpenseViewModel(DialogService dialogService)
+        public CreateExpenseViewModel(DialogService dialogService, IExpenseService expenseService)
         {
             this.dialogService = dialogService;
+            this.expenseService = expenseService;
+
             this.Model = new Expense { SpentDate = DateTime.UtcNow };
         }
 
         public void OnButtonSaveClicked()
         {
+            var result = this.expenseService.Add(this.Model);
+
             this.dialogService.Close(true);
         }
 

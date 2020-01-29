@@ -6,6 +6,6 @@ namespace PennyTracker.Web.Data
     {
         IEnumerable<Expense> All { get; }
         bool Delete(int id);
-        Expense Add(string description, decimal amount);
+        Expense Add(Expense expense);
     }
 }

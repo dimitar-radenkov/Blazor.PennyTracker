@@ -59,18 +59,14 @@ namespace PennyTracker.Web.Data
             return true;
         }
 
-        public Expense Add(string description, decimal amount)
+        public Expense Add(Expense expense)
         {
-            var item = new Expense
-            {
-                Id = this.expenses.Max(x => x.Id) + 1,
-                Description = description,
-                Amount = amount,
-            };
+            expense.Id = this.expenses.Max(x => x.Id) + 1;
+            expense.CreationDate = DateTime.UtcNow;
 
-            this.expenses.Add(item);
+            this.expenses.Add(expense);
 
-            return item;
+            return expense;
         }
     }
 }

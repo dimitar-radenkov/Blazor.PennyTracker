@@ -4,9 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using PennyTracker.ViewModels;
 using PennyTracker.Web.Data;
-
+using PennyTracker.Web.ViewModels;
 using Radzen;
 
 namespace PennyTracker.Web
@@ -29,7 +28,9 @@ namespace PennyTracker.Web
             services.AddSingleton<IExpenseService, ExpenseService>();
 
             services.AddScoped<DialogService>();
+            services.AddScoped<NotificationService>();
             services.AddScoped<IIndexViewModel, IndexViewModel>();
+            services.AddScoped<ICreateExpenseViewModel, CreateExpenseViewModel>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,7 +6,7 @@ using PennyTracker.Web.Pages;
 
 using Radzen;
 
-namespace PennyTracker.ViewModels
+namespace PennyTracker.Web.ViewModels
 {
     public interface IIndexViewModel
     {
@@ -20,22 +20,36 @@ namespace PennyTracker.ViewModels
     public class IndexViewModel : IIndexViewModel
     {
         private readonly IExpenseService expenseService;
+        private readonly NotificationService notificationService;
         private readonly DialogService dialogService;
 
         public IEnumerable<Expense> All => this.expenseService.All;
 
         public IndexViewModel(
             IExpenseService expenseService, 
+            NotificationService notificationService,
             DialogService dialogService)
         {
             this.expenseService = expenseService;
+            this.notificationService = notificationService;
             this.dialogService = dialogService;
         }
         public async Task OnButtonAddClickAsync()
         {
-            await this.dialogService.OpenAsync<CreateExpense>(
+            var result = await this.dialogService.OpenAsync<CreateExpense>(
                 title: "Create New Expense",
                 options: new DialogOptions() { Width = "500px", Height = "auto", Left = "calc(50% - 250px)"});
+
+            if (result)
+            {
+                this.notificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Create Expense",
+                    Detail = "Added Sucessfully",
+                    Duration = 4000
+                });
+            }
         }
 
         public void OnButtonEditClick(int id)
