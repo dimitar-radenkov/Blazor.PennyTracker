@@ -14,9 +14,19 @@
 <RadzenGrid Data="@this.ViewModel.All" AllowSorting="true">
     <Columns>
         <RadzenGridColumn TItem="Expense"
-                          Property="Description" 
-                          Title="Description" 
-                          Width="300px" 
+                          Property="Category"
+                          Title="Category"
+                          Width="100px">
+            <Template Context="ctx">
+                <CategoryIcon Category="ctx.Category"/>
+                <RadzenLabel Text="@ctx.Category.ToString()" />    
+            </Template>
+        </RadzenGridColumn>
+
+        <RadzenGridColumn TItem="Expense"
+                          Property="Description"
+                          Title="Description"
+                          Width="300px"
                           Type="string" />
 
         <RadzenGridColumn TItem="Expense"
@@ -27,22 +37,22 @@
         <RadzenGridColumn TItem="Expense"
                           Property="Amount"
                           Title="Amount"
-                          Width="100px" 
+                          Width="100px"
                           Type="number" />
 
         <RadzenGridColumn TItem="Expense" Width="100px" Filterable="false">
             <Template Context="ctx">
-                <RadzenButton Text="Edit" 
-                              Icon="edit" 
-                              ButtonStyle="ButtonStyle.Info" 
+                <RadzenButton Text="Edit"
+                              Icon="edit"
+                              ButtonStyle="ButtonStyle.Info"
                               Click="(s) => ViewModel.OnButtonEditClick(ctx.Id)"></RadzenButton>
             </Template>
         </RadzenGridColumn>
 
         <RadzenGridColumn TItem="Expense" Width="100px" Filterable="false">
             <Template Context="ctx">
-                <RadzenButton Icon="delete" 
-                              Text="Delete" 
+                <RadzenButton Icon="delete"
+                              Text="Delete"
                               ButtonStyle="ButtonStyle.Danger"
                               Click="(s) => ViewModel.OnButtonDeleteClick(ctx.Id)"></RadzenButton>
             </Template>
@@ -56,4 +66,9 @@
 {
     [Inject]
     public IIndexViewModel ViewModel { get; set; }
+
+    private string Test()
+    {
+        return "<RadzenIcon Icon='data'></RadzenIcon>";
+    }
 }

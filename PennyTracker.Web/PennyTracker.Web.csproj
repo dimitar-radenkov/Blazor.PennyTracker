@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Radzen.Blazor" Version="2.1.12" />
+    <PackageReference Include="Radzen.Blazor" Version="2.1.14" />
+    <PackageReference Include="Syncfusion.EJ2.Blazor" Version="17.4.0.46" />
   </ItemGroup>
 
 </Project>

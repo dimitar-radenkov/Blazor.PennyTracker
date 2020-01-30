@@ -1,0 +1,32 @@
+﻿@using PennyTracker.Web.Data;
+
+@switch (this.Category)
+{
+    case Category.Grocery:
+        <RadzenIcon Icon="local_mall"></RadzenIcon>
+        break;
+    case Category.Auto:
+        <RadzenIcon Icon="directions_car"></RadzenIcon>
+        break;
+    case Category.Childcare:
+        <RadzenIcon Icon="child_care"></RadzenIcon>
+        break;
+    case Category.Healthcare:
+        <RadzenIcon Icon="local_hospital"></RadzenIcon>
+        break;
+    case Category.Loans:
+        <RadzenIcon Icon="account_balance"></RadzenIcon>
+        break;
+    case Category.EatingOut:
+        <RadzenIcon Icon="fastfood"></RadzenIcon>
+        break;
+    default:
+        break;
+}
+
+
+@code
+{
+    [Parameter]
+    public Category Category { get; set; }
+}

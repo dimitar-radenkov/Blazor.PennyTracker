@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.Web", "PennyTracker.Web\PennyTracker.Web.csproj", "{7EF9CCC5-F851-471C-9E71-5C218D346C20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PennyTracker.Web.Tests", "PennyTracker.Web.Tests\PennyTracker.Web.Tests.csproj", "{9E613ACE-7C31-4F8F-99E6-D17308137B8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.Web.Tests", "PennyTracker.Web.Tests\PennyTracker.Web.Tests.csproj", "{9E613ACE-7C31-4F8F-99E6-D17308137B8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

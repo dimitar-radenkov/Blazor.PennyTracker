@@ -7,5 +7,6 @@
         Childcare,
         Healthcare,
         Loans,
+        EatingOut
     }
 }
