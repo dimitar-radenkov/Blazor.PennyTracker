@@ -19,6 +19,7 @@ namespace PennyTracker.Web.Tests
             var dialogServiceMock = new Mock<IDialogService>();
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            vm.OnInitialized();
 
             //assert
             Assert.IsNotNull(vm.Model); 
@@ -36,6 +37,7 @@ namespace PennyTracker.Web.Tests
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            vm.OnInitialized();
 
             //act
             vm.OnButtonSaveClicked();
@@ -55,6 +57,7 @@ namespace PennyTracker.Web.Tests
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            vm.OnInitialized();
 
             //act
             vm.OnButtonCancelClicked();
