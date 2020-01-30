@@ -3,7 +3,8 @@
 @using PennyTracker.Web.Data
 @using PennyTracker.Web.ViewModels
 
-    <RadzenTemplateForm TItem="Expense" Data="this.ViewModel.Model" 
+    <RadzenTemplateForm TItem="Expense" 
+                        Data="this.ViewModel.Model" 
                         Submit="(x) => this.ViewModel.OnButtonSaveClicked()">
         <div class="row" style="margin:5px">
             <div class="col-md-4">
@@ -33,8 +34,12 @@
                                    Style="width:100%" />
                 </div>
                 <div class="row" style="height:20px">
-                    <RadzenRequiredValidator Component="Amount" Text="Amount is required" />
-                    <RadzenNumericRangeValidator Component="Amount" Min="1" Max="1000000" Text="Amount must be between 1 and 1 000 000" />
+                    <RadzenRequiredValidator Component="Amount" 
+                                             Text="Amount is required" />
+                    <RadzenNumericRangeValidator Component="Amount" 
+                                                 Min="1" 
+                                                 Max="1000000" 
+                                                 Text="Amount must be between 1 and 1 000 000" />
                 </div>
             </div>
         </div>
@@ -51,7 +56,8 @@
                                    Style="width:100%;" />
                 </div>
                 <div class="row" style="height:20px">
-                    <RadzenRequiredValidator Component="Description" Text="Description is required" />
+                    <RadzenRequiredValidator Component="Description" 
+                                             Text="Description is required" />
                 </div>
             </div>
         </div>
@@ -73,8 +79,16 @@
 
         <div class="row" style="margin:5px">
             <div class="col-md-8 offset-4 d-flex justify-content-md-end">
-                <RadzenButton Text="Save" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary " Style="margin-right:5px"/>
-                <RadzenButton Text="Cancel" Click="this.ViewModel.OnButtonCancelClicked" ButtonStyle="ButtonStyle.Secondary" />
+                <RadzenButton Text="Save" 
+                              Icon="save" 
+                              ButtonType="ButtonType.Submit" 
+                              ButtonStyle="ButtonStyle.Primary " 
+                              Style="margin-right:5px"/>
+
+                <RadzenButton Text="Cancel"
+                              Icon="cancel"
+                              Click="this.ViewModel.OnButtonCancelClicked"
+                              ButtonStyle="ButtonStyle.Secondary" />
             </div>
         </div>
     </RadzenTemplateForm>

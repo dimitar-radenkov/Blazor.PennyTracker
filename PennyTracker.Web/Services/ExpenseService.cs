@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PennyTracker.Web.Data
+using PennyTracker.Web.Data;
+
+namespace PennyTracker.Web.Services
 {
     public class ExpenseService : IExpenseService
     {

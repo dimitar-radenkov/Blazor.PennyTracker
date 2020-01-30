@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace PennyTracker.Web.Data
+using PennyTracker.Web.Data;
+
+namespace PennyTracker.Web.Services
 {
     public interface IExpenseService
     {
