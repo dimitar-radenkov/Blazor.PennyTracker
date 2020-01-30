@@ -82,5 +82,13 @@
 @code
 {
     [Inject]
-    public ICreateExpenseViewModel ViewModel { get; set; }  
+    public ICreateExpenseViewModel ViewModel { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.ViewModel.OnInitialized(this.Id);
+    }
 }

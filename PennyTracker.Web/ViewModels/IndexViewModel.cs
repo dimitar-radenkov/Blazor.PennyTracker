@@ -1,11 +1,11 @@
-﻿using PennyTracker.Web.Data;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using PennyTracker.Web.Data;
 using PennyTracker.Web.Pages;
 using PennyTracker.Web.Services;
 
 using Radzen;
-
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PennyTracker.Web.ViewModels
 {
@@ -13,7 +13,7 @@ namespace PennyTracker.Web.ViewModels
     {
         IEnumerable<Expense> All { get; }
         Task OnButtonAddClickAsync();
-        void OnButtonEditClick(int id);
+        Task OnButtonEditClick(int id);
         void OnButtonDeleteClick(int id);
     }
 
@@ -34,27 +34,23 @@ namespace PennyTracker.Web.ViewModels
             this.notificationService = notificationService;
             this.dialogService = dialogService;
         }
+
         public async Task OnButtonAddClickAsync()
         {
-            var result = await this.dialogService.OpenAsync<CreateExpense>(
+            await this.OpenCreateExpenseDialog(
                 title: "Create New Expense",
-                options: new DialogOptions() { Width = "500px", Height = "auto", Left = "calc(50% - 250px)"});
-
-            if (result)
-            {
-                this.notificationService.Notify(new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Success,
-                    Summary = "Create Expense",
-                    Detail = "Added Sucessfully",
-                    Duration = 4000
-                });
-            }
+                id: 0, 
+                messageSummary: "Create Expense", 
+                messageDetail: "Added Successfully");
         }
 
-        public void OnButtonEditClick(int id)
+        public async Task OnButtonEditClick(int id)
         {
-
+            await this.OpenCreateExpenseDialog(
+                title: "Create New Expense",
+                id: id,
+                messageSummary: "Create Expense",
+                messageDetail: "Added Successfully");
         }
 
         public void OnButtonDeleteClick(int id)
@@ -62,6 +58,27 @@ namespace PennyTracker.Web.ViewModels
             this.expenseService.Delete(id);
         }
 
+        private async Task OpenCreateExpenseDialog(
+            string title, 
+            int id, 
+            string messageSummary, 
+            string messageDetail)
+        {
+            var result = await this.dialogService.OpenAsync<CreateExpense>(
+                title: title,
+                parameters: new Dictionary<string, object> { { "Id", id } },
+                options: new DialogOptions() { Width = "500px", Height = "auto", Left = "calc(50% - 250px)" });
 
+            if (result)
+            {
+                this.notificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = messageSummary,
+                    Detail = messageDetail,
+                    Duration = 4000
+                });
+            }
+        }
     }
 }

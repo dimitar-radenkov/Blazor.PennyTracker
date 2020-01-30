@@ -8,9 +8,8 @@ namespace PennyTracker.Web.ViewModels
     public interface ICreateExpenseViewModel
     {
         Expense Model { get; set; }
-
+        void OnInitialized(int id = 0);
         void OnButtonSaveClicked();
-
         void OnButtonCancelClicked();
     }
 
@@ -25,13 +24,27 @@ namespace PennyTracker.Web.ViewModels
         {
             this.dialogService = dialogService;
             this.expenseService = expenseService;
+        }
 
-            this.Model = new Expense { SpentDate = DateTime.UtcNow };
+        public void OnInitialized(int id = 0)
+        {
+            var editedItem = this.expenseService.Get(id);
+
+            this.Model = id == 0 || editedItem == null
+                ? new Expense { SpentDate = DateTime.UtcNow }
+                : editedItem;
         }
 
         public void OnButtonSaveClicked()
         {
-            var result = this.expenseService.Add(this.Model);
+            if (this.Model.Id == 0)
+            {
+                this.expenseService.Add(this.Model);
+            }
+            else
+            {
+                this.expenseService.Update(this.Model.Id, this.Model);
+            }
 
             this.dialogService.Close(true);
         }

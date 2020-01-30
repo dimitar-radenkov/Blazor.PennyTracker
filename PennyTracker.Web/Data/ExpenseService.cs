@@ -44,6 +44,28 @@ namespace PennyTracker.Web.Data
             };
         }
 
+        public Expense Get(int id) =>
+            this.expenses.Where(x => x.Id == id).FirstOrDefault();
+
+        public Expense Update(int id, Expense expense)
+        {
+            try
+            {
+                var current = this.expenses.Where(x => x.Id == id).FirstOrDefault();
+                this.expenses.Remove(current);
+
+                this.expenses.Add(expense);
+
+                return expense;
+            }
+            catch (Exception)
+            {
+                //log error
+            }
+
+            return null;
+        }
+
         public bool Delete(int id)
         {
             try
