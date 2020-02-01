@@ -43,6 +43,15 @@ namespace PennyTracker.Web.Services
                     SpentDate = DateTime.UtcNow.AddDays(-2),
                     Amount = 100
                 },
+                new Expense
+                {
+                    Id = 4,
+                    Description = "Petrol",
+                    Category = Category.Auto,
+                    CreationDate = DateTime.UtcNow.AddDays(-2),
+                    SpentDate = DateTime.UtcNow.AddDays(-2),
+                    Amount = 120
+                },
             };
         }
 

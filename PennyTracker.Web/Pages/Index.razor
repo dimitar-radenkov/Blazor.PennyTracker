@@ -16,10 +16,12 @@
         <RadzenGridColumn TItem="Expense"
                           Property="Category"
                           Title="Category"
-                          Width="100px">
+                          Width="120px">
             <Template Context="ctx">
-                <CategoryIcon Category="ctx.Category"/>
-                <RadzenLabel Text="@ctx.Category.ToString()" />    
+                <div class="d-flex flex-row">
+                    <CategoryIcon Category="ctx.Category"/>
+                    <RadzenLabel Text="@ctx.Category.ToString()" Style="margin-left:5px" />
+                </div>
             </Template>
         </RadzenGridColumn>
 
