@@ -53,7 +53,8 @@ namespace PennyTracker.Web
                 });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")),
+                 ServiceLifetime.Transient);
 
             services
                 .AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -77,7 +78,7 @@ namespace PennyTracker.Web
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddTransient<IExpenseService, ExpenseService>();
 
             services.AddScoped<DialogService>();
             services.AddScoped<IDialogService, AppDialogService>();

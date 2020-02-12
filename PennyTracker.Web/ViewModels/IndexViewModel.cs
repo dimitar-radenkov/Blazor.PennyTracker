@@ -23,7 +23,7 @@ namespace PennyTracker.Web.ViewModels
         private readonly NotificationService notificationService;
         private readonly IDialogService dialogService;
 
-        public IEnumerable<Expense> All => new List<Expense>();
+        public IEnumerable<Expense> All => this.expenseService.GetAll();
 
         public IndexViewModel(
             IExpenseService expenseService, 

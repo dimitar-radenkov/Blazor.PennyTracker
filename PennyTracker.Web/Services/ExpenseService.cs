@@ -2,82 +2,35 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using PennyTracker.Web.Data;
 
 namespace PennyTracker.Web.Services
 {
     public class ExpenseService : IExpenseService
     {
-        private readonly ApplicationDbContext dbContext;
-
-        public ExpenseService(ApplicationDbContext dbContext)
+        public Task<Expense> AddAsync(Expense expense)
         {
-            this.dbContext = dbContext;
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Expense>> GetAllAsync() => await this.dbContext.Expenses.AsNoTracking().ToListAsync();
-
-        public async Task<Expense> GetAsync(int id) => await this.dbContext.Expenses.FindAsync(id);
-
-        public async Task<Expense> UpdateAsync(int id, Expense expense)
+        public Task<bool> DeleteAsync(int id)
         {
-            try
-            {
-                var current = this.dbContext.Expenses.Find(id);
-
-                current.Amount = expense.Amount;
-                current.Category = expense.Category;
-                current.Description = expense.Description;
-                current.SpentDate = expense.SpentDate;
-
-
-                this.dbContext.Expenses.Update(current);
-                await this.dbContext.SaveChangesAsync();
-
-                return current;
-            }
-            catch (Exception)
-            {
-                //log error
-            }
-
-            return null;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public IEnumerable<Expense> GetAll()
         {
-            try
-            {
-                var expense = await this.dbContext.Expenses.FindAsync(id);
-                this.dbContext.Expenses.Remove(expense);
-                await this.dbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                //log errror
-                return false;
-            }
-
-            return true;
+            throw new NotImplementedException();
         }
 
-        public async Task<Expense> AddAsync(Expense expense)
+        public Task<Expense> GetAsync(int id)
         {
-            try
-            {
-                await this.dbContext.Expenses.AddAsync(expense);
-                await this.dbContext.SaveChangesAsync();
+            throw new NotImplementedException();
+        }
 
-                return expense;
-            }
-            catch (Exception)
-            {
-                //log error
-            }
-
-            return null;
+        public Task<Expense> UpdateAsync(int id, Expense expense)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace PennyTracker.Web.Services
 {
     public interface IExpenseService
     {
-        Task<IEnumerable<Expense>> GetAllAsync();
+        IEnumerable<Expense> GetAll();
         Task<Expense> GetAsync(int id);
         Task<bool> DeleteAsync(int id);
         Task<Expense> AddAsync(Expense expense);
