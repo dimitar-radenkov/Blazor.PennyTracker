@@ -36,7 +36,7 @@ namespace PennyTracker.Web.Tests
             var dialogServiceMock = new Mock<IDialogService>();
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitialized();
+            vm.OnInitializeAsync().GetAwaiter().GetResult();
 
             //assert
             Assert.IsNotNull(vm.Model); 
@@ -48,12 +48,12 @@ namespace PennyTracker.Web.Tests
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
-            expenseServiceMock.Setup(x => x.Get(It.IsAny<int>())).Returns(this.expense);
+            expenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.expense);
 
             var dialogServiceMock = new Mock<IDialogService>();
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitialized(this.expense.Id);
+            vm.OnInitializeAsync(this.expense.Id).GetAwaiter().GetResult();
 
             //assert
             Assert.IsNotNull(vm.Model);
@@ -69,19 +69,19 @@ namespace PennyTracker.Web.Tests
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
-            expenseServiceMock.Setup(x => x.Add(It.IsAny<Expense>()));
+            expenseServiceMock.Setup(x => x.AddAsync(It.IsAny<Expense>()));
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitialized();
+            vm.OnInitializeAsync(this.expense.Id).GetAwaiter().GetResult();
 
             //act
-            vm.OnButtonSaveClicked();
+            vm.OnButtonSaveClickAsync().GetAwaiter().GetResult();
 
             //assert
-            expenseServiceMock.Verify(x => x.Add(vm.Model));
+            expenseServiceMock.Verify(x => x.AddAsync(vm.Model));
             dialogServiceMock.Verify(x => x.Close(true));
         }
 
@@ -90,20 +90,20 @@ namespace PennyTracker.Web.Tests
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
-            expenseServiceMock.Setup(x => x.Get(It.IsAny<int>())).Returns(this.expense);
-            expenseServiceMock.Setup(x => x.Add(It.IsAny<Expense>()));
+            expenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.expense);
+            expenseServiceMock.Setup(x => x.AddAsync(It.IsAny<Expense>()));
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitialized(this.expense.Id);
+            vm.OnInitializeAsync(this.expense.Id).GetAwaiter().GetResult();
 
             //act
-            vm.OnButtonSaveClicked();
+            vm.OnButtonSaveClickAsync().GetAwaiter().GetResult();
 
             //assert
-            expenseServiceMock.Verify(x => x.Update(vm.Model.Id, vm.Model));
+            expenseServiceMock.Verify(x => x.UpdateAsync(vm.Model.Id, vm.Model));
             dialogServiceMock.Verify(x => x.Close(true));
         }
 
@@ -117,7 +117,7 @@ namespace PennyTracker.Web.Tests
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitialized();
+            vm.OnInitializeAsync().GetAwaiter().GetResult();
 
             //act
             vm.OnButtonCancelClicked();

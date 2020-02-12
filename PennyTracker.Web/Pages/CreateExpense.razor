@@ -5,7 +5,7 @@
 
     <RadzenTemplateForm TItem="Expense" 
                         Data="this.ViewModel.Model" 
-                        Submit="(x) => this.ViewModel.OnButtonSaveClicked()">
+                        Submit="async (x) => await this.ViewModel.OnButtonSaveClickAsync()">
         <div class="row" style="margin:5px">
             <div class="col-md-4">
                 <RadzenLabel Text="Category"></RadzenLabel>
@@ -101,8 +101,8 @@
     [Parameter]
     public int Id { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        this.ViewModel.OnInitialized(this.Id);
+        await this.ViewModel.OnInitializeAsync(this.Id);
     }
 }

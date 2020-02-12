@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Threading.Tasks;
 using PennyTracker.Web.Data;
 using PennyTracker.Web.Services;
 
@@ -8,8 +8,8 @@ namespace PennyTracker.Web.ViewModels
     public interface ICreateExpenseViewModel
     {
         Expense Model { get; set; }
-        void OnInitialized(int id = 0);
-        void OnButtonSaveClicked();
+        Task OnInitializeAsync(int id = 0);
+        Task OnButtonSaveClickAsync();
         void OnButtonCancelClicked();
     }
 
@@ -26,24 +26,24 @@ namespace PennyTracker.Web.ViewModels
             this.expenseService = expenseService;
         }
 
-        public void OnInitialized(int id = 0)
+        public async Task OnInitializeAsync(int id = 0)
         {
-            var editedItem = this.expenseService.Get(id);
+            var editedItem = await this.expenseService.GetAsync(id);
 
             this.Model = id == 0 || editedItem == null
                 ? new Expense { SpentDate = DateTime.UtcNow }
                 : editedItem;
         }
 
-        public void OnButtonSaveClicked()
+        public async Task OnButtonSaveClickAsync()
         {
-            if (this.Model.Id == 0)
+            if (this.Model.Id == 0) //new 
             {
-                this.expenseService.Add(this.Model);
+                await this.expenseService.AddAsync(this.Model);
             }
-            else
+            else //edit
             {
-                this.expenseService.Update(this.Model.Id, this.Model);
+                await this.expenseService.UpdateAsync(this.Model.Id, this.Model);
             }
 
             this.dialogService.Close(true);

@@ -13,8 +13,8 @@ namespace PennyTracker.Web.ViewModels
     {
         IEnumerable<Expense> All { get; }
         Task OnButtonAddClickAsync();
-        Task OnButtonEditClick(int id);
-        void OnButtonDeleteClick(int id);
+        Task OnButtonEditClickAsync(int id);
+        Task OnButtonDeleteClickAsync(int id);
     }
 
     public class IndexViewModel : IIndexViewModel
@@ -23,7 +23,7 @@ namespace PennyTracker.Web.ViewModels
         private readonly NotificationService notificationService;
         private readonly IDialogService dialogService;
 
-        public IEnumerable<Expense> All => this.expenseService.All;
+        public IEnumerable<Expense> All => new List<Expense>();
 
         public IndexViewModel(
             IExpenseService expenseService, 
@@ -44,18 +44,18 @@ namespace PennyTracker.Web.ViewModels
                 messageDetail: "Added Successfully");
         }
 
-        public async Task OnButtonEditClick(int id)
+        public async Task OnButtonEditClickAsync(int id)
         {
             await this.OpenCreateExpenseDialog(
-                title: "Create New Expense",
+                title: "Edit Expense",
                 id: id,
-                messageSummary: "Create Expense",
+                messageSummary: "Edit Expense",
                 messageDetail: "Added Successfully");
         }
 
-        public void OnButtonDeleteClick(int id)
+        public async Task OnButtonDeleteClickAsync(int id)
         {
-            this.expenseService.Delete(id);
+            await this.expenseService.DeleteAsync(id);
         }
 
         private async Task OpenCreateExpenseDialog(

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 using PennyTracker.Web.Data;
 
@@ -8,66 +10,33 @@ namespace PennyTracker.Web.Services
 {
     public class ExpenseService : IExpenseService
     {
-        private List<Expense> expenses;
-        public IEnumerable<Expense> All => this.expenses;
-        public ExpenseService()
+        private readonly ApplicationDbContext dbContext;
+
+        public ExpenseService(ApplicationDbContext dbContext)
         {
-            this.expenses = new List<Expense>()
-            {
-                new Expense
-                {
-                    Id = 1,
-                    Description = "Diezel",
-                    Category = Category.Auto,
-                    CreationDate = DateTime.UtcNow.AddDays(-1),
-                    SpentDate = DateTime.UtcNow.AddDays(-1),
-                    Amount = 150
-                },
-
-                new Expense
-                {
-                    Id = 2,
-                    Description = "House",
-                    Category = Category.Loans,
-                    CreationDate = DateTime.UtcNow,
-                    SpentDate = DateTime.UtcNow,
-                    Amount = 750
-                },
-
-                new Expense
-                {
-                    Id = 3,
-                    Description = "Toys",
-                    Category = Category.Childcare,
-                    CreationDate = DateTime.UtcNow.AddDays(-2),
-                    SpentDate = DateTime.UtcNow.AddDays(-2),
-                    Amount = 100
-                },
-                new Expense
-                {
-                    Id = 4,
-                    Description = "Petrol",
-                    Category = Category.Auto,
-                    CreationDate = DateTime.UtcNow.AddDays(-2),
-                    SpentDate = DateTime.UtcNow.AddDays(-2),
-                    Amount = 120
-                },
-            };
+            this.dbContext = dbContext;
         }
 
-        public Expense Get(int id) =>
-            this.expenses.Where(x => x.Id == id).FirstOrDefault();
+        public async Task<IEnumerable<Expense>> GetAllAsync() => await this.dbContext.Expenses.AsNoTracking().ToListAsync();
 
-        public Expense Update(int id, Expense expense)
+        public async Task<Expense> GetAsync(int id) => await this.dbContext.Expenses.FindAsync(id);
+
+        public async Task<Expense> UpdateAsync(int id, Expense expense)
         {
             try
             {
-                var current = this.expenses.Where(x => x.Id == id).FirstOrDefault();
-                this.expenses.Remove(current);
+                var current = this.dbContext.Expenses.Find(id);
 
-                this.expenses.Add(expense);
+                current.Amount = expense.Amount;
+                current.Category = expense.Category;
+                current.Description = expense.Description;
+                current.SpentDate = expense.SpentDate;
 
-                return expense;
+
+                this.dbContext.Expenses.Update(current);
+                await this.dbContext.SaveChangesAsync();
+
+                return current;
             }
             catch (Exception)
             {
@@ -77,11 +46,13 @@ namespace PennyTracker.Web.Services
             return null;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             try
             {
-                var res = this.expenses.RemoveAll(x => x.Id == id);
+                var expense = await this.dbContext.Expenses.FindAsync(id);
+                this.dbContext.Expenses.Remove(expense);
+                await this.dbContext.SaveChangesAsync();
             }
             catch (Exception)
             {
@@ -92,14 +63,21 @@ namespace PennyTracker.Web.Services
             return true;
         }
 
-        public Expense Add(Expense expense)
+        public async Task<Expense> AddAsync(Expense expense)
         {
-            expense.Id = this.expenses.Max(x => x.Id) + 1;
-            expense.CreationDate = DateTime.UtcNow;
+            try
+            {
+                await this.dbContext.Expenses.AddAsync(expense);
+                await this.dbContext.SaveChangesAsync();
 
-            this.expenses.Add(expense);
+                return expense;
+            }
+            catch (Exception)
+            {
+                //log error
+            }
 
-            return expense;
+            return null;
         }
     }
 }

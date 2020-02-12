@@ -47,7 +47,7 @@
                 <RadzenButton Text="Edit"
                               Icon="edit"
                               ButtonStyle="ButtonStyle.Info"
-                              Click="(s) => ViewModel.OnButtonEditClick(ctx.Id)"></RadzenButton>
+                              Click="s => ViewModel.OnButtonEditClickAsync(ctx.Id)"></RadzenButton>
             </Template>
         </RadzenGridColumn>
 
@@ -56,7 +56,7 @@
                 <RadzenButton Icon="delete"
                               Text="Delete"
                               ButtonStyle="ButtonStyle.Danger"
-                              Click="(s) => ViewModel.OnButtonDeleteClick(ctx.Id)"></RadzenButton>
+                              Click="s => ViewModel.OnButtonDeleteClickAsync(ctx.Id)"></RadzenButton>
             </Template>
         </RadzenGridColumn>
 
@@ -68,9 +68,4 @@
 {
     [Inject]
     public IIndexViewModel ViewModel { get; set; }
-
-    private string Test()
-    {
-        return "<RadzenIcon Icon='data'></RadzenIcon>";
-    }
 }

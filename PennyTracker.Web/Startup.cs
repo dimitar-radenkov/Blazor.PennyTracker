@@ -77,7 +77,7 @@ namespace PennyTracker.Web
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<IExpenseService, ExpenseService>();
+            services.AddScoped<IExpenseService, ExpenseService>();
 
             services.AddScoped<DialogService>();
             services.AddScoped<IDialogService, AppDialogService>();
