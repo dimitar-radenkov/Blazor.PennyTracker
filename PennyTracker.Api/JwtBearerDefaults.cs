@@ -1,4 +1,4 @@
-﻿namespace PennyTracker.Web
+﻿namespace PennyTracker.Api
 {
     public class JwtContansts
     {

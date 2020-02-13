@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PennyTracker.Web.Data
+namespace PennyTracker.Shared.Models
 {
     public class Expense
     {

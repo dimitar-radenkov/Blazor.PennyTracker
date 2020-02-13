@@ -1,11 +1,13 @@
 ﻿using System;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PennyTracker.Web.Data;
 
-namespace PennyTracker.Web
+using PennyTracker.Api.Data;
+
+namespace PennyTracker.Api
 {
     public static class ApplicationBuilderExtensions
     {

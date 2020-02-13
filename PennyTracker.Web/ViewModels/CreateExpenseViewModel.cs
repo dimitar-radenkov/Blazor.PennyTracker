@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PennyTracker.Web.Data;
+
+using PennyTracker.Shared.Models;
 using PennyTracker.Web.Services;
 
 namespace PennyTracker.Web.ViewModels

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using PennyTracker.Web.Data;
+using PennyTracker.Shared.Models;
 
 namespace PennyTracker.Web.Services
 {

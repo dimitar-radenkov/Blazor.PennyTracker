@@ -1,97 +1,94 @@
 ﻿@page "/createExpense/{Id}"
 
-@using PennyTracker.Web.Data
-@using PennyTracker.Web.ViewModels
-
-    <RadzenTemplateForm TItem="Expense" 
-                        Data="this.ViewModel.Model" 
-                        Submit="async (x) => await this.ViewModel.OnButtonSaveClickAsync()">
-        <div class="row" style="margin:5px">
-            <div class="col-md-4">
-                <RadzenLabel Text="Category"></RadzenLabel>
+<RadzenTemplateForm TItem="Expense" 
+                    Data="this.ViewModel.Model" 
+                    Submit="async (x) => await this.ViewModel.OnButtonSaveClickAsync()">
+    <div class="row" style="margin:5px">
+        <div class="col-md-4">
+            <RadzenLabel Text="Category"></RadzenLabel>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <RadzenDropDown Placeholder="Category" 
+                                Data="Enum.GetValues(typeof(Category))"
+                                SelectedItem="Category.Grocery"
+                                @bind-Value="this.ViewModel.Model.Category"
+                                Style="width:100%"/>
             </div>
-            <div class="col-md-8">
-                <div class="row">
-                    <RadzenDropDown Placeholder="Category" 
-                                    Data="Enum.GetValues(typeof(Category))"
-                                    SelectedItem="Category.Grocery"
-                                    @bind-Value="this.ViewModel.Model.Category"
-                                    Style="width:100%"/>
-                </div>
-                <div class="row" style="height:20px"></div>
+            <div class="row" style="height:20px"></div>
+        </div>
+    </div>
+
+    <div class="row" style="margin:5px">
+        <div class="col-md-4">
+            <RadzenLabel Text="Amount"></RadzenLabel>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <RadzenNumeric Name="Amount"
+                                Placeholder="Amount" 
+                                @bind-Value="this.ViewModel.Model.Amount"
+                                Style="width:100%" />
+            </div>
+            <div class="row" style="height:20px">
+                <RadzenRequiredValidator Component="Amount" 
+                                            Text="Amount is required" />
+                <RadzenNumericRangeValidator Component="Amount" 
+                                                Min="1" 
+                                                Max="1000000" 
+                                                Text="Amount must be between 1 and 1 000 000" />
             </div>
         </div>
+    </div>
 
-        <div class="row" style="margin:5px">
-            <div class="col-md-4">
-                <RadzenLabel Text="Amount"></RadzenLabel>
+    <div class="row" style="margin:5px">
+        <div class="col-md-4">
+            <RadzenLabel Text="Description"></RadzenLabel>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <RadzenTextBox Name="Description" 
+                                Placeholder="Description"
+                                @bind-Value="this.ViewModel.Model.Description"
+                                Style="width:100%;" />
             </div>
-            <div class="col-md-8">
-                <div class="row">
-                    <RadzenNumeric Name="Amount"
-                                   Placeholder="Amount" 
-                                   @bind-Value="this.ViewModel.Model.Amount"
-                                   Style="width:100%" />
-                </div>
-                <div class="row" style="height:20px">
-                    <RadzenRequiredValidator Component="Amount" 
-                                             Text="Amount is required" />
-                    <RadzenNumericRangeValidator Component="Amount" 
-                                                 Min="1" 
-                                                 Max="1000000" 
-                                                 Text="Amount must be between 1 and 1 000 000" />
-                </div>
+            <div class="row" style="height:20px">
+                <RadzenRequiredValidator Component="Description" 
+                                            Text="Description is required" />
             </div>
         </div>
+    </div>
 
-        <div class="row" style="margin:5px">
-            <div class="col-md-4">
-                <RadzenLabel Text="Description"></RadzenLabel>
-            </div>
-            <div class="col-md-8">
-                <div class="row">
-                    <RadzenTextBox Name="Description" 
-                                   Placeholder="Description"
-                                   @bind-Value="this.ViewModel.Model.Description"
-                                   Style="width:100%;" />
-                </div>
-                <div class="row" style="height:20px">
-                    <RadzenRequiredValidator Component="Description" 
-                                             Text="Description is required" />
-                </div>
-            </div>
+    <div class="row" style="margin:5px">
+        <div class="col-md-4">
+            <RadzenLabel Text="Date"></RadzenLabel>
         </div>
-
-        <div class="row" style="margin:5px">
-            <div class="col-md-4">
-                <RadzenLabel Text="Date"></RadzenLabel>
+        <div class="col-md-8">
+            <div class="row">
+                <RadzenDatePicker Name="Date"
+                                    Placeholder="Date"
+                                    @bind-Value="this.ViewModel.Model.SpentDate"
+                                    Style="width:100%" />
             </div>
-            <div class="col-md-8">
-                <div class="row">
-                    <RadzenDatePicker Name="Date"
-                                      Placeholder="Date"
-                                      @bind-Value="this.ViewModel.Model.SpentDate"
-                                      Style="width:100%" />
-                </div>
-                <div class="row" style="height:20px"></div>
-            </div>
+            <div class="row" style="height:20px"></div>
         </div>
+    </div>
 
-        <div class="row" style="margin:5px">
-            <div class="col-md-8 offset-4 d-flex justify-content-md-end">
-                <RadzenButton Text="Save" 
-                              Icon="save" 
-                              ButtonType="ButtonType.Submit" 
-                              ButtonStyle="ButtonStyle.Primary " 
-                              Style="margin-right:5px"/>
+    <div class="row" style="margin:5px">
+        <div class="col-md-8 offset-4 d-flex justify-content-md-end">
+            <RadzenButton Text="Save" 
+                            Icon="save" 
+                            ButtonType="ButtonType.Submit" 
+                            ButtonStyle="ButtonStyle.Primary " 
+                            Style="margin-right:5px"/>
 
-                <RadzenButton Text="Cancel"
-                              Icon="cancel"
-                              Click="this.ViewModel.OnButtonCancelClicked"
-                              ButtonStyle="ButtonStyle.Secondary" />
-            </div>
+            <RadzenButton Text="Cancel"
+                            Icon="cancel"
+                            Click="this.ViewModel.OnButtonCancelClicked"
+                            ButtonStyle="ButtonStyle.Secondary" />
         </div>
-    </RadzenTemplateForm>
+    </div>
+</RadzenTemplateForm>
 
 @code
 {

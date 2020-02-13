@@ -1,9 +1,10 @@
 using System;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
-using PennyTracker.Web.Data;
+using PennyTracker.Shared.Models;
 using PennyTracker.Web.Services;
 using PennyTracker.Web.ViewModels;
 

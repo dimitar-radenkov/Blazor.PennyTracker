@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PennyTracker.Shared\PennyTracker.Shared.csproj" />
     <ProjectReference Include="..\PennyTracker.Web\PennyTracker.Web.csproj" />
   </ItemGroup>
 

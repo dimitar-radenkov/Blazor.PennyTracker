@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using PennyTracker.Web.Data;
+using PennyTracker.Shared.Models;
 using PennyTracker.Web.Pages;
 using PennyTracker.Web.Services;
 

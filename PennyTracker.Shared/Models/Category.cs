@@ -1,4 +1,4 @@
-﻿namespace PennyTracker.Web.Data
+﻿namespace PennyTracker.Shared.Models
 {
     public enum Category
     {
