@@ -3,7 +3,7 @@
 <h2>Penny Tracker</h2>
 
 <Radzen.Blazor.RadzenButton Text="Add"
-                            Click="async args => await ViewModel.OnButtonAddClickAsync()"
+                            Click="args => ViewModel.OnButtonAddClickAsync()"
                             ButtonStyle="ButtonStyle.Primary">
 
 </Radzen.Blazor.RadzenButton>
@@ -65,4 +65,12 @@
 {
     [Inject]
     public IIndexViewModel ViewModel { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        this.ViewModel.StateChanged += (s, e) => this.StateHasChanged();
+        this.ViewModel.OnInitalializedAsync();
+
+        return base.OnInitializedAsync();
+    }
 }

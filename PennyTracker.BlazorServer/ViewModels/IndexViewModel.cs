@@ -2,28 +2,23 @@
 using System.Threading.Tasks;
 
 using PennyTracker.Shared.Models;
-using PennyTracker.Web.Pages;
-using PennyTracker.Web.Services;
+using PennyTracker.BlazorServer.Pages;
+using PennyTracker.BlazorServer.Services;
 
 using Radzen;
+using System;
 
-namespace PennyTracker.Web.ViewModels
+namespace PennyTracker.BlazorServer.ViewModels
 {
-    public interface IIndexViewModel
-    {
-        IEnumerable<Expense> All { get; }
-        Task OnButtonAddClickAsync();
-        Task OnButtonEditClickAsync(int id);
-        Task OnButtonDeleteClickAsync(int id);
-    }
-
     public class IndexViewModel : IIndexViewModel
     {
         private readonly IExpenseService expenseService;
         private readonly NotificationService notificationService;
         private readonly IDialogService dialogService;
 
-        public IEnumerable<Expense> All => this.expenseService.GetAll();
+        public event EventHandler StateChanged;
+
+        public IEnumerable<Expense> All { get; set; }
 
         public IndexViewModel(
             IExpenseService expenseService, 
@@ -35,6 +30,12 @@ namespace PennyTracker.Web.ViewModels
             this.dialogService = dialogService;
         }
 
+        public async Task OnInitalializedAsync()
+        {
+            this.All = await this.expenseService.GetAll();
+            this.StateChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public async Task OnButtonAddClickAsync()
         {
             await this.OpenCreateExpenseDialog(
@@ -42,20 +43,24 @@ namespace PennyTracker.Web.ViewModels
                 id: 0, 
                 messageSummary: "Create Expense", 
                 messageDetail: "Added Successfully");
+
+            this.All = await this.expenseService.GetAll();
+            this.StateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task OnButtonEditClickAsync(int id)
         {
             await this.OpenCreateExpenseDialog(
-                title: "Edit Expense",
+                title: "Update Expense",
                 id: id,
-                messageSummary: "Edit Expense",
-                messageDetail: "Added Successfully");
+                messageSummary: "Update Expense",
+                messageDetail: "Updated Successfully");
         }
 
         public async Task OnButtonDeleteClickAsync(int id)
         {
             await this.expenseService.DeleteAsync(id);
+            this.StateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private async Task OpenCreateExpenseDialog(

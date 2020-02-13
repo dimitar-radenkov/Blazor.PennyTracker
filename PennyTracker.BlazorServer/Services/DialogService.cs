@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 
 using Radzen;
 
-namespace PennyTracker.Web.Services
+namespace PennyTracker.BlazorServer.Services
 {
     public class AppDialogService : IDialogService
     {

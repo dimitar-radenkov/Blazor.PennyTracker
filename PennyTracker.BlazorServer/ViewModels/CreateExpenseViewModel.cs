@@ -2,18 +2,10 @@
 using System.Threading.Tasks;
 
 using PennyTracker.Shared.Models;
-using PennyTracker.Web.Services;
+using PennyTracker.BlazorServer.Services;
 
-namespace PennyTracker.Web.ViewModels
+namespace PennyTracker.BlazorServer.ViewModels
 {
-    public interface ICreateExpenseViewModel
-    {
-        Expense Model { get; set; }
-        Task OnInitializeAsync(int id = 0);
-        Task OnButtonSaveClickAsync();
-        void OnButtonCancelClicked();
-    }
-
     public class CreateExpenseViewModel : ICreateExpenseViewModel
     {
         private readonly IDialogService dialogService;
@@ -29,11 +21,15 @@ namespace PennyTracker.Web.ViewModels
 
         public async Task OnInitializeAsync(int id = 0)
         {
-            var editedItem = await this.expenseService.GetAsync(id);
-
-            this.Model = id == 0 || editedItem == null
-                ? new Expense { SpentDate = DateTime.UtcNow }
-                : editedItem;
+            //new
+            if (id == 0)
+            {
+                this.Model = new Expense { SpentDate = DateTime.UtcNow };
+            }
+            else //edit
+            {
+                this.Model = await this.expenseService.GetAsync(id);
+            }
         }
 
         public async Task OnButtonSaveClickAsync()

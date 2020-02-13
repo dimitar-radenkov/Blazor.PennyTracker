@@ -1,15 +1,16 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using PennyTracker.Web.Services;
-using PennyTracker.Web.ViewModels;
+using PennyTracker.BlazorServer.Services;
+using PennyTracker.BlazorServer.ViewModels;
 
 using Radzen;
 
-namespace PennyTracker.Web
+namespace PennyTracker.BlazorServer
 {
     public class Startup
     {
@@ -26,7 +27,11 @@ namespace PennyTracker.Web
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddHttpClient<IExpenseService, ExpenseService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44326/");
+            });
+            //services.AddScoped<IExpenseService, ExpenseService>();
 
             services.AddScoped<DialogService>();
             services.AddScoped<IDialogService, AppDialogService>();

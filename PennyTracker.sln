@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.Web", "PennyTracker.Web\PennyTracker.Web.csproj", "{7EF9CCC5-F851-471C-9E71-5C218D346C20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.BlazorServer", "PennyTracker.BlazorServer\PennyTracker.BlazorServer.csproj", "{7EF9CCC5-F851-471C-9E71-5C218D346C20}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.Web.Tests", "PennyTracker.Web.Tests\PennyTracker.Web.Tests.csproj", "{9E613ACE-7C31-4F8F-99E6-D17308137B8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.BlazorServer.Tests", "PennyTracker.BlazorServer.Tests\PennyTracker.BlazorServer.Tests.csproj", "{9E613ACE-7C31-4F8F-99E6-D17308137B8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PennyTracker.Api", "PennyTracker.Api\PennyTracker.Api.csproj", "{72D7641F-0C25-4A94-A214-166A66860010}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.Api", "PennyTracker.Api\PennyTracker.Api.csproj", "{72D7641F-0C25-4A94-A214-166A66860010}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PennyTracker.Shared", "PennyTracker.Shared\PennyTracker.Shared.csproj", "{6E4E566C-9B2A-4670-93E1-53E9B0DEC315}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.Shared", "PennyTracker.Shared\PennyTracker.Shared.csproj", "{6E4E566C-9B2A-4670-93E1-53E9B0DEC315}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

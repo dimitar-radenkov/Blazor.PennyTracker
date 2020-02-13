@@ -5,10 +5,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 using PennyTracker.Shared.Models;
-using PennyTracker.Web.Services;
-using PennyTracker.Web.ViewModels;
+using PennyTracker.BlazorServer.Services;
+using PennyTracker.BlazorServer.ViewModels;
 
-namespace PennyTracker.Web.Tests
+namespace PennyTracker.BlazorServer.Tests
 {
     [TestClass]
     public class CreateExpenseViewModelTests

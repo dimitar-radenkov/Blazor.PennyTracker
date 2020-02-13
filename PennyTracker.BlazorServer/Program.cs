@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace PennyTracker.Web
+namespace PennyTracker.BlazorServer
 {
     public class Program
     {

@@ -98,8 +98,10 @@
     [Parameter]
     public int Id { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
-        await this.ViewModel.OnInitializeAsync(this.Id);
+        this.ViewModel.OnInitializeAsync(this.Id);
+
+        return base.OnInitializedAsync();
     }
 }
