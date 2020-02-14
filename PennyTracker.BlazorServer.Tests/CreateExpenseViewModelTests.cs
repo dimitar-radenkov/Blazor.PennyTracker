@@ -7,6 +7,7 @@ using Moq;
 using PennyTracker.Shared.Models;
 using PennyTracker.BlazorServer.Services;
 using PennyTracker.BlazorServer.ViewModels;
+using System.Threading.Tasks;
 
 namespace PennyTracker.BlazorServer.Tests
 {
@@ -30,14 +31,14 @@ namespace PennyTracker.BlazorServer.Tests
         }
 
         [TestMethod]
-        public void OnInitialzed_WhenCreateNew_ShouldModelBeInstatiated()
+        public async Task OnInitialzed_WhenCreateNew_ShouldModelBeInstatiated()
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
             var dialogServiceMock = new Mock<IDialogService>();
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitializeAsync().GetAwaiter().GetResult();
+            await vm.OnInitializeAsync();
 
             //assert
             Assert.IsNotNull(vm.Model); 
@@ -45,7 +46,7 @@ namespace PennyTracker.BlazorServer.Tests
         }
 
         [TestMethod]
-        public void OnInitialzed_WhenEdit_ShouldModelBeInstatiated()
+        public async Task OnInitialzed_WhenEdit_ShouldModelBeInstatiated()
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
@@ -54,7 +55,7 @@ namespace PennyTracker.BlazorServer.Tests
             var dialogServiceMock = new Mock<IDialogService>();
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitializeAsync(this.expense.Id).GetAwaiter().GetResult();
+            await vm.OnInitializeAsync(this.expense.Id);
 
             //assert
             Assert.IsNotNull(vm.Model);
@@ -66,7 +67,7 @@ namespace PennyTracker.BlazorServer.Tests
         }
 
         [TestMethod]
-        public void OnButtonSave_WhenCreateNew_ShouldCallAddExpense()
+        public async Task OnButtonSave_WhenCreateNew_ShouldCallAddExpense()
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
@@ -76,10 +77,10 @@ namespace PennyTracker.BlazorServer.Tests
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitializeAsync(this.expense.Id).GetAwaiter().GetResult();
+            await vm.OnInitializeAsync();
 
             //act
-            vm.OnButtonSaveClickAsync().GetAwaiter().GetResult();
+            await vm.OnButtonSaveClickAsync();
 
             //assert
             expenseServiceMock.Verify(x => x.AddAsync(vm.Model));
@@ -87,7 +88,7 @@ namespace PennyTracker.BlazorServer.Tests
         }
 
         [TestMethod]
-        public void OnButtonSave_WhenEdit_ShouldCallUpdateExpense()
+        public async Task OnButtonSave_WhenEdit_ShouldCallUpdateExpense()
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
@@ -98,10 +99,10 @@ namespace PennyTracker.BlazorServer.Tests
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitializeAsync(this.expense.Id).GetAwaiter().GetResult();
+            await vm.OnInitializeAsync(this.expense.Id);
 
             //act
-            vm.OnButtonSaveClickAsync().GetAwaiter().GetResult();
+            await vm.OnButtonSaveClickAsync();
 
             //assert
             expenseServiceMock.Verify(x => x.UpdateAsync(vm.Model.Id, vm.Model));
@@ -109,7 +110,7 @@ namespace PennyTracker.BlazorServer.Tests
         }
 
         [TestMethod]
-        public void OnButtonCancel_ShouldCallDialogServiceClose()
+        public async Task OnButtonCancel_ShouldCallDialogServiceClose()
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
@@ -118,7 +119,7 @@ namespace PennyTracker.BlazorServer.Tests
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.OnInitializeAsync().GetAwaiter().GetResult();
+            await vm.OnInitializeAsync();
 
             //act
             vm.OnButtonCancelClicked();
