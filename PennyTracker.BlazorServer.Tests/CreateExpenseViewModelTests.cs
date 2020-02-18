@@ -14,12 +14,13 @@ namespace PennyTracker.BlazorServer.Tests
     [TestClass]
     public class CreateExpenseViewModelTests
     {
-        private Expense expense;
+        private Expense editExpense;
+        private Expense newExpense;
 
         [TestInitialize]
         public void Initialize()
         {
-            this.expense = new Expense
+            this.editExpense = new Expense
             {
                 Id = 1,
                 Amount = 100,
@@ -28,17 +29,19 @@ namespace PennyTracker.BlazorServer.Tests
                 SpentDate = DateTime.UtcNow,
                 Description = "Petrol"
             };
+
+            this.newExpense = new Expense { SpentDate = DateTime.UtcNow };
         }
 
         [TestMethod]
-        public async Task OnInitialzed_WhenCreateNew_ShouldModelBeInstatiated()
+        public void OnInitialzed_WhenCreateNew_ShouldModelBeInstatiated()
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
             var dialogServiceMock = new Mock<IDialogService>();
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            await vm.OnInitializeAsync();
+            vm.Model = this.newExpense;
 
             //assert
             Assert.IsNotNull(vm.Model); 
@@ -46,24 +49,24 @@ namespace PennyTracker.BlazorServer.Tests
         }
 
         [TestMethod]
-        public async Task OnInitialzed_WhenEdit_ShouldModelBeInstatiated()
+        public void OnInitialzed_WhenEdit_ShouldModelBeInstatiated()
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
-            expenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.expense);
+            expenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.editExpense);
 
             var dialogServiceMock = new Mock<IDialogService>();
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            await vm.OnInitializeAsync(this.expense.Id);
+            vm.Model = this.editExpense;
 
             //assert
             Assert.IsNotNull(vm.Model);
-            Assert.AreEqual(this.expense.Id, vm.Model.Id);
-            Assert.AreEqual(this.expense.Category, vm.Model.Category);
-            Assert.AreEqual(this.expense.CreationDate, vm.Model.CreationDate);
-            Assert.AreEqual(this.expense.SpentDate, vm.Model.SpentDate);
-            Assert.AreEqual(this.expense.Description, vm.Model.Description);
+            Assert.AreEqual(this.editExpense.Id, vm.Model.Id);
+            Assert.AreEqual(this.editExpense.Category, vm.Model.Category);
+            Assert.AreEqual(this.editExpense.CreationDate, vm.Model.CreationDate);
+            Assert.AreEqual(this.editExpense.SpentDate, vm.Model.SpentDate);
+            Assert.AreEqual(this.editExpense.Description, vm.Model.Description);
         }
 
         [TestMethod]
@@ -77,7 +80,7 @@ namespace PennyTracker.BlazorServer.Tests
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            await vm.OnInitializeAsync();
+            vm.Model = this.newExpense;
 
             //act
             await vm.OnButtonSaveClickAsync();
@@ -92,14 +95,14 @@ namespace PennyTracker.BlazorServer.Tests
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
-            expenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.expense);
+            expenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.editExpense);
             expenseServiceMock.Setup(x => x.AddAsync(It.IsAny<Expense>()));
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            await vm.OnInitializeAsync(this.expense.Id);
+            vm.Model = this.editExpense;
 
             //act
             await vm.OnButtonSaveClickAsync();
@@ -110,7 +113,7 @@ namespace PennyTracker.BlazorServer.Tests
         }
 
         [TestMethod]
-        public async Task OnButtonCancel_ShouldCallDialogServiceClose()
+        public void OnButtonCancel_ShouldCallDialogServiceClose()
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
@@ -119,7 +122,6 @@ namespace PennyTracker.BlazorServer.Tests
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            await vm.OnInitializeAsync();
 
             //act
             vm.OnButtonCancelClicked();
