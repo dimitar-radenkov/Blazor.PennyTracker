@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 using PennyTracker.Shared.Models;
 using PennyTracker.BlazorServer.Pages;
@@ -18,7 +19,7 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public event EventHandler StateChanged;
 
-        public IEnumerable<Expense> All { get; set; }
+        public IList<Expense> All { get; set; }
 
         public IndexViewModel(
             IExpenseService expenseService, 
@@ -45,7 +46,6 @@ namespace PennyTracker.BlazorServer.ViewModels
                 messageDetail: "Added Successfully");
 
             this.All = await this.expenseService.GetAll();
-            this.StateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task OnButtonEditClickAsync(int id)
@@ -55,12 +55,16 @@ namespace PennyTracker.BlazorServer.ViewModels
                 id: id,
                 messageSummary: "Update Expense",
                 messageDetail: "Updated Successfully");
+
+            //this.All = await this.expenseService.GetAll();
         }
 
         public async Task OnButtonDeleteClickAsync(int id)
         {
             await this.expenseService.DeleteAsync(id);
-            this.StateChanged?.Invoke(this, EventArgs.Empty);
+            var itemToRemove = this.All.FirstOrDefault(x => x.Id == id);
+
+            this.All.Remove(itemToRemove);
         }
 
         private async Task OpenCreateExpenseDialog(

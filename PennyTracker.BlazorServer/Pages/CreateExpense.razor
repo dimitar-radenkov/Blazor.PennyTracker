@@ -101,6 +101,7 @@
     protected override Task OnInitializedAsync()
     {
         this.ViewModel.OnInitializeAsync(this.Id);
+        this.StateHasChanged();
 
         return base.OnInitializedAsync();
     }

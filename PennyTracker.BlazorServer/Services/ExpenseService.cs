@@ -39,10 +39,10 @@ namespace PennyTracker.BlazorServer.Services
             await this.httpClient.DeleteAsync($"{URL_BASE}/{id}");
         }
 
-        public async Task<IEnumerable<Expense>> GetAll()
+        public async Task<IList<Expense>> GetAll()
         {
             var response = await this.httpClient.GetStreamAsync($"{URL_BASE}");
-            var res = await JsonSerializer.DeserializeAsync<IEnumerable<Expense>>(
+            var res = await JsonSerializer.DeserializeAsync<IList<Expense>>(
                 response, 
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 

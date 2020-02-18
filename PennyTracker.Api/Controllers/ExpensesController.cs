@@ -18,25 +18,25 @@ namespace PennyTracker.Api.Controllers
 
         public ExpensesController(ApplicationDbContext context)
         {
-            dbContext = context;
+            this.dbContext = context;
         }
 
         // GET: api/Expenses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
         {
-            return await dbContext.Expenses.ToListAsync();
+            return await this.dbContext.Expenses.ToListAsync();
         }
 
         // GET: api/Expenses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Expense>> GetExpense(int id)
         {
-            var expense = await dbContext.Expenses.FindAsync(id);
+            var expense = await this.dbContext.Expenses.FindAsync(id);
 
             if (expense == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
             return expense;
@@ -50,20 +50,20 @@ namespace PennyTracker.Api.Controllers
         {
             if (id != expense.Id)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            dbContext.Entry(expense).State = EntityState.Modified;
+            this.dbContext.Entry(expense).State = EntityState.Modified;
 
             try
             {
-                await dbContext.SaveChangesAsync();
+                await this.dbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ExpenseExists(id))
+                if (!this.ExpenseExists(id))
                 {
-                    return NotFound();
+                    return this.NotFound();
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace PennyTracker.Api.Controllers
                 }
             }
 
-            return NoContent();
+            return this.NoContent();
         }
 
         // POST: api/Expenses
@@ -80,31 +80,31 @@ namespace PennyTracker.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Expense>> PostExpense(Expense expense)
         {
-            dbContext.Expenses.Add(expense);
-            await dbContext.SaveChangesAsync();
+            this.dbContext.Expenses.Add(expense);
+            await this.dbContext.SaveChangesAsync();
 
-            return CreatedAtAction("GetExpense", new { id = expense.Id }, expense);
+            return this.CreatedAtAction("GetExpense", new { id = expense.Id }, expense);
         }
 
         // DELETE: api/Expenses/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Expense>> DeleteExpense(int id)
         {
-            var expense = await dbContext.Expenses.FindAsync(id);
+            var expense = await this.dbContext.Expenses.FindAsync(id);
             if (expense == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            dbContext.Expenses.Remove(expense);
-            await dbContext.SaveChangesAsync();
+            this.dbContext.Expenses.Remove(expense);
+            await this.dbContext.SaveChangesAsync();
 
             return expense;
         }
 
         private bool ExpenseExists(int id)
         {
-            return dbContext.Expenses.Any(e => e.Id == id);
+            return this.dbContext.Expenses.Any(e => e.Id == id);
         }
     }
 }
