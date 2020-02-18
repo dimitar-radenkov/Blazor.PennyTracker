@@ -1,4 +1,4 @@
-﻿@page "/createExpense/{Id}"
+﻿@page "/createExpense/{model}"
 
 <RadzenTemplateForm TItem="Expense" 
                     Data="this.ViewModel.Model" 
@@ -96,13 +96,10 @@
     public ICreateExpenseViewModel ViewModel { get; set; }
 
     [Parameter]
-    public int Id { get; set; }
+    public Expense model { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        this.ViewModel.OnInitializeAsync(this.Id);
-        this.StateHasChanged();
-
-        return base.OnInitializedAsync();
+        this.ViewModel.Model = model;
     }
 }

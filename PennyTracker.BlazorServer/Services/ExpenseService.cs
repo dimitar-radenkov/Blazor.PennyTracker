@@ -69,7 +69,7 @@ namespace PennyTracker.BlazorServer.Services
         {
             var expenseJson = new StringContent(JsonSerializer.Serialize(expense), Encoding.UTF8, "application/json");
 
-            await this.httpClient.PutAsync("{URL_BASE}", expenseJson);
+            await this.httpClient.PutAsync($"{URL_BASE}/{id}", expenseJson);
         }
     }
 }

@@ -19,19 +19,6 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.expenseService = expenseService;
         }
 
-        public async Task OnInitializeAsync(int id = 0)
-        {
-            //new
-            if (id == 0)
-            {
-                this.Model = new Expense { SpentDate = DateTime.UtcNow };
-            }
-            else //edit
-            {
-                this.Model = await this.expenseService.GetAsync(id);
-            }
-        }
-
         public async Task OnButtonSaveClickAsync()
         {
             if (this.Model.Id == 0) //new 

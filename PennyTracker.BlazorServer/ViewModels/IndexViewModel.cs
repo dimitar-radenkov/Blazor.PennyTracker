@@ -41,7 +41,7 @@ namespace PennyTracker.BlazorServer.ViewModels
         {
             await this.OpenCreateExpenseDialog(
                 title: "Create New Expense",
-                id: 0, 
+                model: new Expense { SpentDate = DateTime.UtcNow }, 
                 messageSummary: "Create Expense", 
                 messageDetail: "Added Successfully");
 
@@ -50,13 +50,15 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public async Task OnButtonEditClickAsync(int id)
         {
+            var model = await this.expenseService.GetAsync(id);
+
             await this.OpenCreateExpenseDialog(
                 title: "Update Expense",
-                id: id,
+                model: model,
                 messageSummary: "Update Expense",
                 messageDetail: "Updated Successfully");
 
-            //this.All = await this.expenseService.GetAll();
+            this.All = await this.expenseService.GetAll();
         }
 
         public async Task OnButtonDeleteClickAsync(int id)
@@ -69,13 +71,13 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         private async Task OpenCreateExpenseDialog(
             string title, 
-            int id, 
+            Expense model, 
             string messageSummary, 
             string messageDetail)
         {
             var result = await this.dialogService.OpenAsync<CreateExpense>(
                 title: title,
-                parameters: new Dictionary<string, object> { { "Id", id } },
+                parameters: new Dictionary<string, object> { { "model", model } },
                 options: new DialogOptions() { Width = "500px", Height = "auto", Left = "calc(50% - 250px)" });
 
             if (result)
