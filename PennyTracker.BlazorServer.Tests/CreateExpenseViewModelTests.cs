@@ -1,26 +1,26 @@
 using System;
+using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
-using PennyTracker.Shared.Models;
 using PennyTracker.BlazorServer.Services;
 using PennyTracker.BlazorServer.ViewModels;
-using System.Threading.Tasks;
+using PennyTracker.Shared.Models;
 
 namespace PennyTracker.BlazorServer.Tests
 {
     [TestClass]
     public class CreateExpenseViewModelTests
     {
-        private Expense editExpense;
+        private Expense updateExpense;
         private Expense newExpense;
 
         [TestInitialize]
         public void Initialize()
         {
-            this.editExpense = new Expense
+            this.updateExpense = new Expense
             {
                 Id = 1,
                 Amount = 100,
@@ -53,20 +53,18 @@ namespace PennyTracker.BlazorServer.Tests
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
-            expenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.editExpense);
-
             var dialogServiceMock = new Mock<IDialogService>();
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.Model = this.editExpense;
+            vm.Model = this.updateExpense;
 
             //assert
             Assert.IsNotNull(vm.Model);
-            Assert.AreEqual(this.editExpense.Id, vm.Model.Id);
-            Assert.AreEqual(this.editExpense.Category, vm.Model.Category);
-            Assert.AreEqual(this.editExpense.CreationDate, vm.Model.CreationDate);
-            Assert.AreEqual(this.editExpense.SpentDate, vm.Model.SpentDate);
-            Assert.AreEqual(this.editExpense.Description, vm.Model.Description);
+            Assert.AreEqual(this.updateExpense.Id, vm.Model.Id);
+            Assert.AreEqual(this.updateExpense.Category, vm.Model.Category);
+            Assert.AreEqual(this.updateExpense.CreationDate, vm.Model.CreationDate);
+            Assert.AreEqual(this.updateExpense.SpentDate, vm.Model.SpentDate);
+            Assert.AreEqual(this.updateExpense.Description, vm.Model.Description);
         }
 
         [TestMethod]
@@ -74,7 +72,11 @@ namespace PennyTracker.BlazorServer.Tests
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
-            expenseServiceMock.Setup(x => x.AddAsync(It.IsAny<Expense>()));
+            expenseServiceMock.Setup(x => x.AddAsync(
+                It.IsAny<string>(),
+                It.IsAny<decimal>(),
+                It.IsAny<Category>(),
+                It.IsAny<DateTime>()));
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
@@ -86,7 +88,12 @@ namespace PennyTracker.BlazorServer.Tests
             await vm.OnButtonSaveClickAsync();
 
             //assert
-            expenseServiceMock.Verify(x => x.AddAsync(vm.Model));
+            expenseServiceMock.Verify(x => x.AddAsync(
+                vm.Model.Description,
+                vm.Model.Amount,
+                vm.Model.Category,
+                vm.Model.SpentDate));
+
             dialogServiceMock.Verify(x => x.Close(true));
         }
 
@@ -95,14 +102,17 @@ namespace PennyTracker.BlazorServer.Tests
         {
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
-            expenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync(this.editExpense);
-            expenseServiceMock.Setup(x => x.AddAsync(It.IsAny<Expense>()));
+            expenseServiceMock.Setup(x => x.AddAsync(
+                It.IsAny<string>(),
+                It.IsAny<decimal>(),
+                It.IsAny<Category>(),
+                It.IsAny<DateTime>()));
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
             var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
-            vm.Model = this.editExpense;
+            vm.Model = this.updateExpense;
 
             //act
             await vm.OnButtonSaveClickAsync();

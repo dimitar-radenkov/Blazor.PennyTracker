@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-using PennyTracker.Shared.Models;
 using PennyTracker.BlazorServer.Services;
+using PennyTracker.Shared.Models;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
@@ -23,7 +22,11 @@ namespace PennyTracker.BlazorServer.ViewModels
         {
             if (this.Model.Id == 0) //new 
             {
-                await this.expenseService.AddAsync(this.Model);
+                await this.expenseService.AddAsync(
+                    this.Model.Description,
+                    this.Model.Amount,
+                    this.Model.Category,
+                    this.Model.SpentDate);
             }
             else //edit
             {

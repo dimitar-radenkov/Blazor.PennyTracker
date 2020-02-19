@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 using PennyTracker.Shared.Models;
+using PennyTracker.Shared.Models.InputBindingModels;
 
 namespace PennyTracker.BlazorServer.Services
 {
@@ -19,11 +20,17 @@ namespace PennyTracker.BlazorServer.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<Expense> AddAsync(Expense expense)
+        public async Task<Expense> AddAsync(string description, decimal amount, Category category, DateTime spentDate)
         {
-            var expenseJson =
-                 new StringContent(JsonSerializer.Serialize(expense), Encoding.UTF8, "application/json");
+            var expense = new AddExpenseBindingModel
+            {
+                Description = description,
+                Amount = amount,
+                Category = category,
+                SpentDate = spentDate
+            };
 
+            var expenseJson = new StringContent(JsonSerializer.Serialize(expense), Encoding.UTF8, "application/json");
             var response = await this.httpClient.PostAsync(URL_BASE, expenseJson);
 
             if (response.IsSuccessStatusCode)

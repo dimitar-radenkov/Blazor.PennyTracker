@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-using PennyTracker.Shared.Models;
 using PennyTracker.BlazorServer.Pages;
 using PennyTracker.BlazorServer.Services;
+using PennyTracker.Shared.Models;
 
 using Radzen;
-using System;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
