@@ -43,15 +43,19 @@ namespace PennyTracker.Api.Controllers
         }
 
         // PUT: api/Expenses/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExpense(int id, Expense expense)
+        public async Task<IActionResult> PutExpense(int id, UpdateExpenseBindingModel model)
         {
-            if (id != expense.Id)
+            var expense = await this.expenseRepository.GetAsync(id);
+            if (expense == null)
             {
-                return this.BadRequest();
+                return this.NotFound();
             }
+
+            expense.Amount = model.Amount;
+            expense.Description = model.Description;
+            expense.Category = model.Category;
+            expense.SpentDate = model.SpentDate;
 
             if(!await this.expenseRepository.UpdateAsync(expense))
             {
@@ -64,6 +68,7 @@ namespace PennyTracker.Api.Controllers
             return this.NoContent();
         }
 
+        // POST: api/Expense
         [HttpPost]
         public async Task<ActionResult<Expense>> PostExpense(AddExpenseBindingModel model)
         {

@@ -30,7 +30,12 @@ namespace PennyTracker.BlazorServer.ViewModels
             }
             else //edit
             {
-                await this.expenseService.UpdateAsync(this.Model.Id, this.Model);
+                await this.expenseService.UpdateAsync(
+                    this.Model.Id,
+                    this.Model.Description,
+                    this.Model.Amount,
+                    this.Model.Category,
+                    this.Model.SpentDate);
             }
 
             this.dialogService.Close(true);
