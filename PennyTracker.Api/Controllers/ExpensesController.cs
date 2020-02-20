@@ -27,7 +27,7 @@ namespace PennyTracker.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
         {
-            return await this.dbContext.Expenses.ToListAsync();
+            return this.Ok(await this.dbContext.Expenses.ToListAsync());
         }
 
         // GET: api/Expenses/5
@@ -41,7 +41,7 @@ namespace PennyTracker.Api.Controllers
                 return this.NotFound();
             }
 
-            return expense;
+            return this.Ok(expense);
         }
 
         // PUT: api/Expenses/5
@@ -79,11 +79,6 @@ namespace PennyTracker.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Expense>> PostExpense(AddExpenseBindingModel model)
         {
-            if(!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
             var expense = new Expense
             {
                 Description = model.Description,
