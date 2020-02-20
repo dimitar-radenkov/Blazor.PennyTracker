@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using PennyTracker.Api.Data;
+using PennyTracker.Api.Repository;
 using PennyTracker.Shared.Models;
 using PennyTracker.Shared.Models.InputBindingModels;
 
@@ -16,25 +14,25 @@ namespace PennyTracker.Api.Controllers
     [ApiController]
     public class ExpensesController : ControllerBase
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly IExpenseRepository expenseRepository;
 
-        public ExpensesController(ApplicationDbContext context)
+        public ExpensesController(IExpenseRepository expenseRepository)
         {
-            this.dbContext = context;
+            this.expenseRepository = expenseRepository;
         }
 
         // GET: api/Expenses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
         {
-            return this.Ok(await this.dbContext.Expenses.ToListAsync());
+            return this.Ok(await this.expenseRepository.GetAllAsync());
         }
 
         // GET: api/Expenses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Expense>> GetExpense(int id)
         {
-            var expense = await this.dbContext.Expenses.FindAsync(id);
+            var expense = await this.expenseRepository.GetAsync(id);
 
             if (expense == null)
             {
@@ -55,21 +53,11 @@ namespace PennyTracker.Api.Controllers
                 return this.BadRequest();
             }
 
-            this.dbContext.Entry(expense).State = EntityState.Modified;
-
-            try
+            if(!await this.expenseRepository.UpdateAsync(expense))
             {
-                await this.dbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!this.ExpenseExists(id))
+                if(!await this.expenseRepository.ExistsAsync(id))
                 {
                     return this.NotFound();
-                }
-                else
-                {
-                    throw;
                 }
             }
 
@@ -88,8 +76,7 @@ namespace PennyTracker.Api.Controllers
                 CreationDate = DateTime.UtcNow,
             };
 
-            this.dbContext.Expenses.Add(expense);
-            await this.dbContext.SaveChangesAsync();
+            await this.expenseRepository.AddAsync(expense);
 
             return this.CreatedAtAction("GetExpense", new { id = expense.Id }, expense);
         }
@@ -98,21 +85,15 @@ namespace PennyTracker.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Expense>> DeleteExpense(int id)
         {
-            var expense = await this.dbContext.Expenses.FindAsync(id);
+            var expense = await this.expenseRepository.GetAsync(id);
             if (expense == null)
             {
                 return this.NotFound();
             }
 
-            this.dbContext.Expenses.Remove(expense);
-            await this.dbContext.SaveChangesAsync();
+            await this.expenseRepository.DeleteAsync(expense);
 
-            return expense;
-        }
-
-        private bool ExpenseExists(int id)
-        {
-            return this.dbContext.Expenses.Any(e => e.Id == id);
+            return this.NoContent();
         }
     }
 }

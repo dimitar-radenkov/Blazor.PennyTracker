@@ -10,7 +10,7 @@ namespace PennyTracker.Shared.Models.InputBindingModels
         public string Description { get; set; }
 
         [Required]
-        [Range(1, 1000000, ErrorMessage = "Amount must be between 1 and 1 000 000")]
+        [Range(1, 1_000_000, ErrorMessage = "Amount must be between 1 and 1 000 000")]
         public decimal Amount { get; set; }
 
         [Required]
