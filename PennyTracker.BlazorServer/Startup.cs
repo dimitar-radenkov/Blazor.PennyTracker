@@ -29,7 +29,7 @@ namespace PennyTracker.BlazorServer
             services.AddServerSideBlazor();
             services.AddHttpClient<IExpenseService, ExpenseService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:44326/");
+                client.BaseAddress = new Uri("https://localhost:44361/");
             });
             //services.AddScoped<IExpenseService, ExpenseService>();
 
