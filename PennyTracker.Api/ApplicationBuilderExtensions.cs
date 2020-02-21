@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +34,7 @@ namespace PennyTracker.Api
             }
         }
 
-        public static void SeedDatabase(this IApplicationBuilder app)
+        public static void SeedIfEmptyDatabase(this IApplicationBuilder app)
         {
             using (var scope = app.ApplicationServices.CreateScope())
             {
@@ -45,20 +45,23 @@ namespace PennyTracker.Api
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     context.Database.EnsureCreated();
 
-                    context.Expenses.Add(new Expense { Description = "diesel", Category = Category.Auto, Amount = 150M, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
-                    context.Expenses.Add(new Expense { Description = "diesel", Category = Category.Auto, Amount = 120M, CreationDate = DateTime.UtcNow.AddDays(-1), SpentDate = DateTime.UtcNow.AddDays(-1) });
-                    context.Expenses.Add(new Expense { Description = "diesel", Category = Category.Auto, Amount = 122M, CreationDate = DateTime.UtcNow.AddDays(-4), SpentDate = DateTime.UtcNow.AddDays(-4) });
-                    context.Expenses.Add(new Expense { Description = "food", Category = Category.Grocery, Amount = 350M, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
-                    context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 25, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
-                    context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 22, CreationDate = DateTime.UtcNow.AddDays(-1), SpentDate = DateTime.UtcNow.AddDays(-1) });
-                    context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 14, CreationDate = DateTime.UtcNow.AddDays(-2), SpentDate = DateTime.UtcNow.AddDays(-2) });
-                    context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 6, CreationDate = DateTime.UtcNow.AddDays(-3), SpentDate = DateTime.UtcNow.AddDays(-3) });
-                    context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 9, CreationDate = DateTime.UtcNow.AddDays(-4), SpentDate = DateTime.UtcNow.AddDays(-4) });
-                    context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 10, CreationDate = DateTime.UtcNow.AddDays(-5), SpentDate = DateTime.UtcNow.AddDays(-5) });
-                    context.Expenses.Add(new Expense { Description = "pharmacy", Category = Category.Healthcare, Amount = 150M, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
-                    context.Expenses.Add(new Expense { Description = "mortgage", Category = Category.Loans, Amount = 750, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
+                    if (!context.Expenses.Any())
+                    {
+                        context.Expenses.Add(new Expense { Description = "diesel", Category = Category.Auto, Amount = 150M, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
+                        context.Expenses.Add(new Expense { Description = "diesel", Category = Category.Auto, Amount = 120M, CreationDate = DateTime.UtcNow.AddDays(-1), SpentDate = DateTime.UtcNow.AddDays(-1) });
+                        context.Expenses.Add(new Expense { Description = "diesel", Category = Category.Auto, Amount = 122M, CreationDate = DateTime.UtcNow.AddDays(-4), SpentDate = DateTime.UtcNow.AddDays(-4) });
+                        context.Expenses.Add(new Expense { Description = "food", Category = Category.Grocery, Amount = 350M, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
+                        context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 25, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
+                        context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 22, CreationDate = DateTime.UtcNow.AddDays(-1), SpentDate = DateTime.UtcNow.AddDays(-1) });
+                        context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 14, CreationDate = DateTime.UtcNow.AddDays(-2), SpentDate = DateTime.UtcNow.AddDays(-2) });
+                        context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 6, CreationDate = DateTime.UtcNow.AddDays(-3), SpentDate = DateTime.UtcNow.AddDays(-3) });
+                        context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 9, CreationDate = DateTime.UtcNow.AddDays(-4), SpentDate = DateTime.UtcNow.AddDays(-4) });
+                        context.Expenses.Add(new Expense { Description = "lunch", Category = Category.EatingOut, Amount = 10, CreationDate = DateTime.UtcNow.AddDays(-5), SpentDate = DateTime.UtcNow.AddDays(-5) });
+                        context.Expenses.Add(new Expense { Description = "pharmacy", Category = Category.Healthcare, Amount = 150M, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
+                        context.Expenses.Add(new Expense { Description = "mortgage", Category = Category.Loans, Amount = 750, CreationDate = DateTime.UtcNow, SpentDate = DateTime.UtcNow });
 
-                    context.SaveChanges();
+                        context.SaveChanges();
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -86,7 +86,10 @@ namespace PennyTracker.Api
             }
 
             app.UseHttpsRedirection();
+
             app.MigrateDatabase();
+            app.SeedIfEmptyDatabase();
+
             app.UseCors(CORS_POLICY);
             app.UseAuthentication();
             app.UseRouting();
