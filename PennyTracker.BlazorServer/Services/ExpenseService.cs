@@ -20,7 +20,11 @@ namespace PennyTracker.BlazorServer.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<Expense> AddAsync(string description, decimal amount, Category category, DateTime spentDate)
+        public async Task<Expense> AddAsync(
+            string description,
+            decimal amount,
+            Category category,
+            DateTime spentDate)
         {
             var expense = new AddExpenseBindingModel
             {
@@ -72,8 +76,21 @@ namespace PennyTracker.BlazorServer.Services
             return res;
         }
 
-        public async Task UpdateAsync(int id, Expense expense)
+        public async Task UpdateAsync(
+            int id,
+            string description,
+            decimal amount,
+            Category category,
+            DateTime spentDate)
         {
+            var expense = new UpdateExpenseBindingModel
+            {
+                Description = description,
+                Amount = amount,
+                Category = category,
+                SpentDate = spentDate
+            };
+
             var expenseJson = new StringContent(JsonSerializer.Serialize(expense), Encoding.UTF8, "application/json");
 
             await this.httpClient.PutAsync($"{URL_BASE}/{id}", expenseJson);

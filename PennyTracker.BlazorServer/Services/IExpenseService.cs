@@ -12,6 +12,6 @@ namespace PennyTracker.BlazorServer.Services
         Task<Expense> GetAsync(int id);
         Task DeleteAsync(int id);
         Task<Expense> AddAsync(string description, decimal amount, Category category, DateTime spentDate);
-        Task UpdateAsync(int id, Expense expense);
+        Task UpdateAsync(int id, string description, decimal amount, Category category, DateTime spentDate);
     }
 }

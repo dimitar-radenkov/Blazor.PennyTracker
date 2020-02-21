@@ -118,7 +118,13 @@ namespace PennyTracker.BlazorServer.Tests
             await vm.OnButtonSaveClickAsync();
 
             //assert
-            expenseServiceMock.Verify(x => x.UpdateAsync(vm.Model.Id, vm.Model));
+            expenseServiceMock.Verify(x => x.UpdateAsync(
+                vm.Model.Id,
+                vm.Model.Description,
+                vm.Model.Amount,
+                vm.Model.Category,
+                vm.Model.SpentDate));
+
             dialogServiceMock.Verify(x => x.Close(true));
         }
 

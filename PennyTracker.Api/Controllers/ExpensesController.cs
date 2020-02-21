@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using PennyTracker.Api.Data;
+using PennyTracker.Api.Repository;
 using PennyTracker.Shared.Models;
 using PennyTracker.Shared.Models.InputBindingModels;
 
@@ -16,74 +14,64 @@ namespace PennyTracker.Api.Controllers
     [ApiController]
     public class ExpensesController : ControllerBase
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly IExpenseRepository expenseRepository;
 
-        public ExpensesController(ApplicationDbContext context)
+        public ExpensesController(IExpenseRepository expenseRepository)
         {
-            this.dbContext = context;
+            this.expenseRepository = expenseRepository;
         }
 
         // GET: api/Expenses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
         {
-            return await this.dbContext.Expenses.ToListAsync();
+            return this.Ok(await this.expenseRepository.GetAllAsync());
         }
 
         // GET: api/Expenses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Expense>> GetExpense(int id)
         {
-            var expense = await this.dbContext.Expenses.FindAsync(id);
+            var expense = await this.expenseRepository.GetAsync(id);
 
             if (expense == null)
             {
                 return this.NotFound();
             }
 
-            return expense;
+            return this.Ok(expense);
         }
 
         // PUT: api/Expenses/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExpense(int id, Expense expense)
+        public async Task<IActionResult> PutExpense(int id, UpdateExpenseBindingModel model)
         {
-            if (id != expense.Id)
+            var expense = await this.expenseRepository.GetAsync(id);
+            if (expense == null)
             {
-                return this.BadRequest();
+                return this.NotFound();
             }
 
-            this.dbContext.Entry(expense).State = EntityState.Modified;
+            expense.Amount = model.Amount;
+            expense.Description = model.Description;
+            expense.Category = model.Category;
+            expense.SpentDate = model.SpentDate;
 
-            try
+            if(!await this.expenseRepository.UpdateAsync(expense))
             {
-                await this.dbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!this.ExpenseExists(id))
+                if(!await this.expenseRepository.ExistsAsync(id))
                 {
                     return this.NotFound();
-                }
-                else
-                {
-                    throw;
                 }
             }
 
             return this.NoContent();
         }
 
+        // POST: api/Expense
         [HttpPost]
         public async Task<ActionResult<Expense>> PostExpense(AddExpenseBindingModel model)
         {
-            if(!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
             var expense = new Expense
             {
                 Description = model.Description,
@@ -93,8 +81,7 @@ namespace PennyTracker.Api.Controllers
                 CreationDate = DateTime.UtcNow,
             };
 
-            this.dbContext.Expenses.Add(expense);
-            await this.dbContext.SaveChangesAsync();
+            await this.expenseRepository.AddAsync(expense);
 
             return this.CreatedAtAction("GetExpense", new { id = expense.Id }, expense);
         }
@@ -103,21 +90,15 @@ namespace PennyTracker.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Expense>> DeleteExpense(int id)
         {
-            var expense = await this.dbContext.Expenses.FindAsync(id);
+            var expense = await this.expenseRepository.GetAsync(id);
             if (expense == null)
             {
                 return this.NotFound();
             }
 
-            this.dbContext.Expenses.Remove(expense);
-            await this.dbContext.SaveChangesAsync();
+            await this.expenseRepository.DeleteAsync(expense);
 
-            return expense;
-        }
-
-        private bool ExpenseExists(int id)
-        {
-            return this.dbContext.Expenses.Any(e => e.Id == id);
+            return this.NoContent();
         }
     }
 }
