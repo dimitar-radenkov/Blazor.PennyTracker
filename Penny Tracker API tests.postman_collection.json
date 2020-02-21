@@ -1,0 +1,300 @@
+{
+	"info": {
+		"_postman_id": "092d9255-d7ed-4fa8-b89a-f6d48490c4b6",
+		"name": "Penny Tracker API tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Create new expense",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "64d898f7-c806-4323-9ab8-e96c7c2d0ebe",
+								"exec": [
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0e91e1f0-ea01-4f87-a5ad-b1315d5363df",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"er\",\n    \"amount\": 5,\n    \"category\": 0,\n    \"creationDate\": \"0001-01-01T00:00:00\",\n    \"spentDate\": \"2020-02-19T05:18:35.8885451\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{env}}{{port}}/api/Expenses",
+							"protocol": "https",
+							"host": [
+								"{{env}}{{port}}"
+							],
+							"path": [
+								"api",
+								"Expenses"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "Get expenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{env}}{{port}}/api/Expenses",
+							"protocol": "https",
+							"host": [
+								"{{env}}{{port}}"
+							],
+							"path": [
+								"api",
+								"Expenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific expense",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{env}}{{port}}/api/Expenses/{{id}}",
+							"protocol": "https",
+							"host": [
+								"{{env}}{{port}}"
+							],
+							"path": [
+								"api",
+								"Expenses",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Negative test-Get specific expense",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "530d0f97-c1a5-46fe-84e6-1f629e07a7e7",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"pm.test(\"Status code name has string\", function () {",
+									"    pm.response.to.have.status(\"Not Found\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{env}}{{port}}/api/Expenses/23456",
+							"protocol": "https",
+							"host": [
+								"{{env}}{{port}}"
+							],
+							"path": [
+								"api",
+								"Expenses",
+								"23456"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "PUT",
+			"item": [
+				{
+					"name": "Update specific expense",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f2b676c4-58bf-4f77-aa1f-300c795308b6",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"2\",\r\n\t\"amount\": 23.00,\r\n    \"description\": \"UpdateTest\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{env}}{{port}}/api/Expenses/{{id}}",
+							"protocol": "https",
+							"host": [
+								"{{env}}{{port}}"
+							],
+							"path": [
+								"api",
+								"Expenses",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Negative test-Update specific expense",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f2b676c4-58bf-4f77-aa1f-300c795308b6",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"One or more validation errors occurred.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"1\",\r\n    \"description\": \"UpdateTest\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{env}}{{port}}/api/Expenses/{{id}}",
+							"protocol": "https",
+							"host": [
+								"{{env}}{{port}}"
+							],
+							"path": [
+								"api",
+								"Expenses",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "Delete an expense",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://{{env}}{{port}}/api/Expenses/{{id}}",
+							"protocol": "https",
+							"host": [
+								"{{env}}{{port}}"
+							],
+							"path": [
+								"api",
+								"Expenses",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
