@@ -22,7 +22,7 @@ namespace PennyTracker.Api
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
 
-                    context.Database.EnsureDeleted();
+                    //context.Database.EnsureDeleted();
                     context.Database.Migrate();
                     context.Database.EnsureCreated();
                 }
