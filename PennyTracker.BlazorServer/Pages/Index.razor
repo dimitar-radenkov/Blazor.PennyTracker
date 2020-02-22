@@ -22,7 +22,7 @@ else
                               Title="Category"
                               Width="120px">
                 <Template Context="ctx">
-                    <div class="d-flex flex-row">
+                    <div class="">
                         <CategoryIcon Category="ctx.Category" />
                         <RadzenLabel Text="@ctx.Category.ToString()" Style="margin-left:5px" />
                     </div>
@@ -44,7 +44,7 @@ else
                               Title="Amount"
                               Type="number" />
 
-            <RadzenGridColumn TItem="Expense" Filterable="false" Width="150px">
+            <RadzenGridColumn TItem="Expense" Filterable="false" Width="150px" Sortable="false">
                 <Template Context="ctx">
                     <RadzenButton Icon="edit"
                                   Attributes="this.ViewModel.EditButtonAttributes"
