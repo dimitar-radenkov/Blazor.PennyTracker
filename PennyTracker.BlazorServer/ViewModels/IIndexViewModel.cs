@@ -9,6 +9,9 @@ namespace PennyTracker.BlazorServer.ViewModels
     public interface IIndexViewModel
     {
         event EventHandler StateChanged;
+
+        IReadOnlyDictionary<string, object> EditButtonAttributes { get; }
+        IReadOnlyDictionary<string, object> DeleteButtonAttributes { get; }
         IList<Expense> All { get; }
         Task OnInitalializedAsync();
         Task OnButtonAddClickAsync();

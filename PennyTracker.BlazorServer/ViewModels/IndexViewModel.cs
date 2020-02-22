@@ -21,6 +21,9 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public IList<Expense> All { get; set; }
 
+        public IReadOnlyDictionary<string, object> EditButtonAttributes => new Dictionary<string, object>() { { "title", "Edit" } };
+        public IReadOnlyDictionary<string, object> DeleteButtonAttributes => new Dictionary<string, object>() { { "title", "Delete" } };
+
         public IndexViewModel(
             IExpenseService expenseService, 
             NotificationService notificationService,
