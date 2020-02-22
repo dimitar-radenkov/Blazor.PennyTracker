@@ -2,76 +2,9 @@
 
 <h2>Penny Tracker</h2>
 
-@if (this.ViewModel.All == null)
-{
-    <h3>Loading...</h3>
-    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
-}
-else
-{
-    <Radzen.Blazor.RadzenButton Text="Add"
-                                Click="args => ViewModel.OnButtonAddClickAsync()"
-                                ButtonStyle="ButtonStyle.Primary">
-
-    </Radzen.Blazor.RadzenButton>
-
-    <RadzenGrid Data="@this.ViewModel.All" AllowSorting="true">
-        <Columns>
-            <RadzenGridColumn TItem="Expense"
-                              Property="Category"
-                              Title="Category"
-                              Width="120px">
-                <Template Context="ctx">
-                    <div class="">
-                        <CategoryIcon Category="ctx.Category" />
-                        <RadzenLabel Text="@ctx.Category.ToString()" Style="margin-left:5px" />
-                    </div>
-                </Template>
-            </RadzenGridColumn>
-
-            <RadzenGridColumn TItem="Expense"
-                              Property="Description"
-                              Title="Description"
-                              Type="string" />
-
-            <RadzenGridColumn TItem="Expense"
-                              Property="SpentDate"
-                              Type="integer"
-                              Title="Date" />
-
-            <RadzenGridColumn TItem="Expense"
-                              Property="Amount"
-                              Title="Amount"
-                              Type="number" />
-
-            <RadzenGridColumn TItem="Expense" Filterable="false" Width="150px" Sortable="false">
-                <Template Context="ctx">
-                    <RadzenButton Icon="edit"
-                                  Attributes="this.ViewModel.EditButtonAttributes"
-                                  ButtonStyle="ButtonStyle.Info"
-                                  Click="s => ViewModel.OnButtonEditClickAsync(ctx.Id)"></RadzenButton>
-                    <RadzenButton Icon="delete"
-                                  Style="margin-right:5px"
-                                  Attributes="this.ViewModel.DeleteButtonAttributes"
-                                  ButtonStyle="ButtonStyle.Danger"
-                                  Click="s => ViewModel.OnButtonDeleteClickAsync(ctx.Id)"></RadzenButton>
-                </Template>
-            </RadzenGridColumn>
-
-        </Columns>
-    </RadzenGrid>
-}
+<Expenses></Expenses>
 
 @code
-{
-    [Inject]
-    public IIndexViewModel ViewModel { get; set; }
+{ 
 
-    protected override Task OnInitializedAsync()
-    {
-        this.ViewModel.StateChanged += (s, e) => this.StateHasChanged();
-        this.ViewModel.OnInitalializedAsync();
-
-        return base.OnInitializedAsync();
-    }
 }
