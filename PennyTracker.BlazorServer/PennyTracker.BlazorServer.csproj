@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ChartJs.Blazor" Version="1.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
-    <PackageReference Include="Radzen.Blazor" Version="2.2.0" />
-    <PackageReference Include="Syncfusion.EJ2.Blazor" Version="17.4.0.50" />
+    <PackageReference Include="Radzen.Blazor" Version="2.2.5" />
   </ItemGroup>
 
   <ItemGroup>
