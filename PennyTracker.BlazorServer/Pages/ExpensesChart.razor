@@ -1,22 +1,59 @@
-﻿@using ChartJs.Blazor;
-
-@using PennyTracker.BlazorServer.Services;
+﻿@using PennyTracker.BlazorServer.Services;
+@using PennyTracker.BlazorServer.Utils
 
 @using ChartJs.Blazor.Charts
 @using ChartJs.Blazor.ChartJS.PieChart
 @using ChartJs.Blazor.ChartJS.Common.Properties
 @using ChartJs.Blazor.Util
 
-<h3>Chart</h3>
 
-<ChartJsPieChart @ref="this.pieChartJs" Config="@this.config" Width="300" Height="150" />
 
-@code 
+@if (this.expensesByCategory == null)
 {
+    <h3>Loading...</h3>
+    <RadzenProgressBar Style="background-color:red" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+}
+else
+{
+    <div class="row">Expenses Report</div>
+    <div class="row align-items-center">
+        <div class="col-6">
+            <ChartJsPieChart @ref="this.pieChartJs" Config="@this.config" Width="300" Height="150" />
+        </div>
+        <div class="col-6">          
+            @foreach (var item in this.expensesByCategory)
+            {
+                <div>
+                    <h6>@item.Category</h6>
+                    <RadzenProgressBar Value="item.Percentage"
+                                       ShowValue="true"
+                                       Style="@item.Style"
+                                       Mode="ProgressBarMode.Determinate"></RadzenProgressBar>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code
+{
+    class AmountsByCategory
+    {
+        public string Category { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public string Style { get; set; }
+
+        public string BackgroundColor { get; set; }
+
+        public double Percentage { get; set; }
+    }
+
     private PieConfig config;
     private ChartJsPieChart pieChartJs;
 
-    private IEnumerable<Expense> expenses;
+    private IEnumerable<AmountsByCategory> expensesByCategory;
 
     [Inject]
     public IExpenseService ExpenseService { get; set; }
@@ -30,7 +67,7 @@
                 Title = new OptionsTitle
                 {
                     Display = true,
-                    Text = "Expenses"
+                    Text = "",
                 },
                 Responsive = true,
                 Animation = new ArcAnimation
@@ -40,18 +77,37 @@
                 }
             },
         };
-        var expenses = await this.ExpenseService.GetAll();
 
-        var data = expenses.GroupBy(
+
+        var expenses = await this.ExpenseService.GetAll();
+        var totalSum = expenses.Sum(x => x.Amount);
+
+        this.expensesByCategory = expenses.GroupBy(
                 p => p.Category,
                 p => p.Amount,
-                (key, g) => new { Category = key, Amount = g.Sum(), BackgroundColor = ColorUtil.RandomColorString() }).OrderBy(x => x.Amount);
+                (key, g) =>
+                {
+                    var color = RandomKnownColorPicker.Get().ToString().ToLower();
+                    var groupSum = g.Sum();
 
-        config.Data.Labels.AddRange(data.Select(x => x.Category.ToString()));
+                    return new AmountsByCategory
+                    {
+                        Category = key.ToString(),
+                        Amount = groupSum,
+                        Style = $"background-color:{color}",
+                        BackgroundColor = color,
+                        Percentage = Math.Round(Convert.ToDouble((groupSum / totalSum) * 100), 2)
+                    };
+                })
+                .OrderBy(x => x.Amount)
+                .ToList();
+            
+
+        config.Data.Labels.AddRange(this.expensesByCategory.Select(x => x.Category));
 
         var pieSet = new PieDataset
         {
-            BackgroundColor = data.Select(x => x.BackgroundColor).ToArray(),
+            BackgroundColor = this.expensesByCategory.Select(x => x.BackgroundColor).ToArray(),
             BorderWidth = 0,
             HoverBackgroundColor = ColorUtil.RandomColorString(),
             HoverBorderColor = ColorUtil.RandomColorString(),
@@ -59,7 +115,7 @@
             BorderColor = "#ffffff",
         };
 
-        pieSet.Data.AddRange(data.Select(x => Convert.ToDouble(x.Amount)));
+        pieSet.Data.AddRange(this.expensesByCategory.Select(x => Convert.ToDouble(x.Amount)));
         config.Data.Datasets.Add(pieSet);
     }
 }
