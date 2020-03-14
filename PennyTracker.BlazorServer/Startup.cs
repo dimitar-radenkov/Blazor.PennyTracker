@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using PennyTracker.BlazorServer.Services;
 using PennyTracker.BlazorServer.ViewModels;
 
+using Prism.Events;
+
 using Radzen;
 
 namespace PennyTracker.BlazorServer
@@ -36,10 +38,12 @@ namespace PennyTracker.BlazorServer
 
             services.AddScoped<DialogService>();
             services.AddScoped<IDialogService, AppDialogService>();
+            services.AddScoped<IEventAggregator, EventAggregator>();
 
             services.AddScoped<NotificationService>();
-            services.AddScoped<IIndexViewModel, IndexViewModel>();
+            services.AddScoped<IExpensesTableViewModel, ExpensesTableViewModel>();
             services.AddScoped<ICreateExpenseViewModel, CreateExpenseViewModel>();
+            services.AddScoped<IExpenseChartViewModel, ExpenseChartViewModel>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

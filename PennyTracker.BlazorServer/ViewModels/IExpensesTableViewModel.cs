@@ -6,7 +6,7 @@ using PennyTracker.Shared.Models;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
-    public interface IIndexViewModel
+    public interface IExpensesTableViewModel
     {
         event EventHandler StateChanged;
 

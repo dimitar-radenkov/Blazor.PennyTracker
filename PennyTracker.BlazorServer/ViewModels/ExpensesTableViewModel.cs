@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using PennyTracker.BlazorServer.Events;
 using PennyTracker.BlazorServer.Pages;
 using PennyTracker.BlazorServer.Services;
 using PennyTracker.Shared.Models;
+
+using Prism.Events;
 
 using Radzen;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
-    public class IndexViewModel : IIndexViewModel
+    public class ExpensesTableViewModel : IExpensesTableViewModel
     {
+        private readonly IEventAggregator eventAggregator;
         private readonly IExpenseService expenseService;
         private readonly NotificationService notificationService;
         private readonly IDialogService dialogService;
@@ -24,11 +28,13 @@ namespace PennyTracker.BlazorServer.ViewModels
         public IReadOnlyDictionary<string, object> EditButtonAttributes => new Dictionary<string, object>() { { "title", "Edit" } };
         public IReadOnlyDictionary<string, object> DeleteButtonAttributes => new Dictionary<string, object>() { { "title", "Delete" } };
 
-        public IndexViewModel(
+        public ExpensesTableViewModel(
+            IEventAggregator eventAggregator,
             IExpenseService expenseService, 
             NotificationService notificationService,
             IDialogService dialogService)
         {
+            this.eventAggregator = eventAggregator;
             this.expenseService = expenseService;
             this.notificationService = notificationService;
             this.dialogService = dialogService;
@@ -92,6 +98,8 @@ namespace PennyTracker.BlazorServer.ViewModels
                     Detail = messageDetail,
                     Duration = 4000
                 });
+
+                this.eventAggregator.GetEvent<UpdateStateEvent>().Publish();
             }
         }
     }
