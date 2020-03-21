@@ -5,12 +5,17 @@
 }
 else
 {
+
+<div class="row justify-content-between"> 
     <Radzen.Blazor.RadzenButton Text="Add"
                                 Click="args => ViewModel.OnButtonAddClickAsync()"
-                                ButtonStyle="ButtonStyle.Primary">
-
-    </Radzen.Blazor.RadzenButton>
-
+                                ButtonStyle="ButtonStyle.Primary" />
+    
+    <RadzenDropDown TValue="string"
+                    Data="this.ViewModel.Periods"
+                    SelectedItem="this.ViewModel.DefaultSelectedPeriod" />
+</div>
+<div class="row">
     <RadzenGrid Data="@this.ViewModel.All" AllowSorting="true">
         <Columns>
             <RadzenGridColumn TItem="Expense"
@@ -56,6 +61,7 @@ else
 
         </Columns>
     </RadzenGrid>
+</div>
 }
 
 @code

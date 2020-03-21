@@ -25,6 +25,10 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public IList<Expense> All { get; set; }
 
+        public IEnumerable<string> Periods { get; }
+
+        public string DefaultSelectedPeriod { get; }
+
         public IReadOnlyDictionary<string, object> EditButtonAttributes => new Dictionary<string, object>() { { "title", "Edit" } };
         public IReadOnlyDictionary<string, object> DeleteButtonAttributes => new Dictionary<string, object>() { { "title", "Delete" } };
 
@@ -38,6 +42,9 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.expenseService = expenseService;
             this.notificationService = notificationService;
             this.dialogService = dialogService;
+
+            this.Periods = new List<string> { "Last Month", "Current Month", "Custom" };
+            this.DefaultSelectedPeriod = this.Periods.Skip(1).First();
         }
 
         public async Task OnInitalializedAsync()

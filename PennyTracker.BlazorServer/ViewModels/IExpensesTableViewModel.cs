@@ -12,6 +12,8 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         IReadOnlyDictionary<string, object> EditButtonAttributes { get; }
         IReadOnlyDictionary<string, object> DeleteButtonAttributes { get; }
+        IEnumerable<string> Periods { get; }
+        string DefaultSelectedPeriod { get; }
         IList<Expense> All { get; }
         Task OnInitalializedAsync();
         Task OnButtonAddClickAsync();
