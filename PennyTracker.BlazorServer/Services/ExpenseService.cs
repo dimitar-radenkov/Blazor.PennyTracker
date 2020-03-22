@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using PennyTracker.Shared.Extensions;
 using PennyTracker.Shared.Models;
 using PennyTracker.Shared.Models.InputBindingModels;
 
@@ -50,11 +50,12 @@ namespace PennyTracker.BlazorServer.Services
             await this.httpClient.DeleteAsync($"{URL_BASE}/{id}");
         }
 
-        public async Task<IList<Expense>> GetAll()
+        public async Task<IList<Expense>> GetRangeAsync(DateTime from, DateTime to)
         {
-            var response = await this.httpClient.GetStreamAsync($"{URL_BASE}");
+            var response = await this.httpClient.GetStreamAsync($"{URL_BASE}?fromUnixTime={from.ToUnixTime()}&toUnixTime={to.ToUnixTime()}");
+
             var res = await JsonSerializer.DeserializeAsync<IList<Expense>>(
-                response, 
+                response,
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
             return res;

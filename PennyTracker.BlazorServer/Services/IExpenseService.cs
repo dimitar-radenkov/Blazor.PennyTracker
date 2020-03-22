@@ -8,7 +8,7 @@ namespace PennyTracker.BlazorServer.Services
 {
     public interface IExpenseService
     {
-        Task<IList<Expense>> GetAll();
+        Task<IList<Expense>> GetRangeAsync(DateTime from, DateTime to);
         Task<Expense> GetAsync(int id);
         Task DeleteAsync(int id);
         Task<Expense> AddAsync(string description, decimal amount, Category category, DateTime spentDate);

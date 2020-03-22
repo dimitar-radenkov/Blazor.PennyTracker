@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using PennyTracker.Api.Repository;
+using PennyTracker.Shared.Extensions;
 using PennyTracker.Shared.Models;
 using PennyTracker.Shared.Models.InputBindingModels;
 
@@ -22,10 +23,13 @@ namespace PennyTracker.Api.Controllers
         }
 
         // GET: api/Expenses
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
+        [HttpGet()]
+        public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses(long fromUnixTime, long toUnixTime)
         {
-            return this.Ok(await this.expenseRepository.GetAllAsync());
+            var fromDateTime = fromUnixTime.ToDateTime();
+            var toDateTime = toUnixTime.ToDateTime();
+
+            return this.Ok(await this.expenseRepository.GetRangeAsync(fromDateTime, toDateTime));
         }
 
         // GET: api/Expenses/5

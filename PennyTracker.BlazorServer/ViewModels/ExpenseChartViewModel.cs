@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using PennyTracker.BlazorServer.Services;
+using PennyTracker.Shared.Models;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
@@ -20,7 +21,8 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public async Task OnInitalializedAsync()
         {
-            var expenses = await this.expenseService.GetAll();
+            //var expenses = await this.expenseService.GetRangeAsync();
+            var expenses = Enumerable.Empty<Expense>();
             var totalSum = expenses.Sum(x => x.Amount);
 
             this.ExpensesByCategory = expenses.GroupBy(

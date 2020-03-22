@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using PennyTracker.Shared.Models;
@@ -7,7 +8,7 @@ namespace PennyTracker.Api.Repository
 {
     public interface IExpenseRepository
     {
-        Task<IEnumerable<Expense>> GetAllAsync();
+        Task<IEnumerable<Expense>> GetRangeAsync(DateTime from, DateTime to);
         Task<Expense> GetAsync(int id);
         Task AddAsync(Expense expense);
         Task<bool> UpdateAsync(Expense expense);

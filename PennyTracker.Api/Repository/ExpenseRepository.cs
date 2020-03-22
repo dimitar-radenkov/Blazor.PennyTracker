@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,12 @@ namespace PennyTracker.Api.Repository
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Expense>> GetAllAsync() =>
-            await this.dbContext.Expenses.AsNoTracking().ToListAsync();
+        public async Task<IEnumerable<Expense>> GetRangeAsync(DateTime from, DateTime to) =>
+            await this.dbContext.Expenses
+                .Where(x => x.SpentDate >= from)
+                .Where(x => x.SpentDate < to)
+                .AsNoTracking()
+                .ToListAsync();
 
         public async Task<Expense> GetAsync(int id) => 
             await this.dbContext.Expenses.FindAsync(id);

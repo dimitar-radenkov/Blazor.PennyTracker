@@ -1,4 +1,4 @@
-﻿@if (this.ViewModel.All == null)
+﻿@if (this.ViewModel.SelectedPeriod == null)
 {
     <h3>Loading...</h3>
     <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
@@ -7,16 +7,17 @@ else
 {
 
 <div class="row justify-content-between"> 
-    <Radzen.Blazor.RadzenButton Text="Add"
-                                Click="args => ViewModel.OnButtonAddClickAsync()"
-                                ButtonStyle="ButtonStyle.Primary" />
+    <RadzenButton Text="Add"
+                  Click="args => ViewModel.OnButtonAddClickAsync()"
+                  ButtonStyle="ButtonStyle.Primary" />
     
     <RadzenDropDown TValue="string"
                     Data="this.ViewModel.Periods"
-                    SelectedItem="this.ViewModel.DefaultSelectedPeriod" />
+                    @bind-Value="this.ViewModel.SelectedPeriod"
+                    Change="args => this.ViewModel.OnPeriodChangedAsync(args)"/>
 </div>
 <div class="row">
-    <RadzenGrid Data="@this.ViewModel.All" AllowSorting="true">
+    <RadzenGrid Data="@this.ViewModel.Transactions" AllowSorting="true">
         <Columns>
             <RadzenGridColumn TItem="Expense"
                               Property="Category"
@@ -72,8 +73,6 @@ else
     protected override Task OnInitializedAsync()
     {
         this.ViewModel.StateChanged += (s, e) => this.StateHasChanged();
-        this.ViewModel.OnInitalializedAsync();
-
-        return base.OnInitializedAsync();
+        return this.ViewModel.OnInitalializedAsync();
     }
 }

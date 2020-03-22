@@ -23,11 +23,11 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public event EventHandler StateChanged;
 
-        public IList<Expense> All { get; set; }
+        public IList<Expense> Transactions { get; set; }
 
         public IEnumerable<string> Periods { get; }
 
-        public string DefaultSelectedPeriod { get; }
+        public string SelectedPeriod { get; set; }
 
         public IReadOnlyDictionary<string, object> EditButtonAttributes => new Dictionary<string, object>() { { "title", "Edit" } };
         public IReadOnlyDictionary<string, object> DeleteButtonAttributes => new Dictionary<string, object>() { { "title", "Delete" } };
@@ -44,13 +44,12 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.dialogService = dialogService;
 
             this.Periods = new List<string> { "Last Month", "Current Month", "Custom" };
-            this.DefaultSelectedPeriod = this.Periods.Skip(1).First();
+            this.SelectedPeriod = this.Periods.Skip(1).First();
         }
 
         public async Task OnInitalializedAsync()
         {
-            this.All = await this.expenseService.GetAll();
-            this.StateChanged?.Invoke(this, EventArgs.Empty);
+            await this.OnPeriodChangedAsync(null);
         }
 
         public async Task OnButtonAddClickAsync()
@@ -61,7 +60,7 @@ namespace PennyTracker.BlazorServer.ViewModels
                 messageSummary: "Create Expense", 
                 messageDetail: "Added Successfully");
 
-            this.All = await this.expenseService.GetAll();
+            await this.OnPeriodChangedAsync(null);
         }
 
         public async Task OnButtonEditClickAsync(int id)
@@ -74,15 +73,46 @@ namespace PennyTracker.BlazorServer.ViewModels
                 messageSummary: "Update Expense",
                 messageDetail: "Updated Successfully");
 
-            this.All = await this.expenseService.GetAll();
+            await this.OnPeriodChangedAsync(null);
         }
 
         public async Task OnButtonDeleteClickAsync(int id)
         {
             await this.expenseService.DeleteAsync(id);
-            var itemToRemove = this.All.FirstOrDefault(x => x.Id == id);
+            var itemToRemove = this.Transactions.FirstOrDefault(x => x.Id == id);
 
-            this.All.Remove(itemToRemove);
+            this.Transactions.Remove(itemToRemove);
+        }
+
+        public async Task OnPeriodChangedAsync(object args)
+        {
+            switch (this.SelectedPeriod)
+            {
+                case "Last Month":
+                    {
+                        var now = DateTime.UtcNow;
+
+                        var from = new DateTime(now.Year, now.AddMonths(-1).Month, 1);
+                        var to = new DateTime(now.Year, now.Month, 1);
+
+                        this.Transactions = await this.expenseService.GetRangeAsync(from, to);
+                        this.StateChanged.Invoke(this, EventArgs.Empty);
+
+                        break;
+                    }
+                case "Current Month":
+                    {
+                        var now = DateTime.UtcNow;
+
+                        var from = new DateTime(now.Year, now.Month, 1);
+                        var to = now;
+
+                        this.Transactions = await this.expenseService.GetRangeAsync(from, to);
+                        this.StateChanged.Invoke(this, EventArgs.Empty);
+
+                        break;
+                    }
+            }
         }
 
         private async Task OpenCreateExpenseDialog(
