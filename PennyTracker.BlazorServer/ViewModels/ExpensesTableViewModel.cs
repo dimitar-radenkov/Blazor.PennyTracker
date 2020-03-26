@@ -27,7 +27,11 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public IEnumerable<string> Periods { get; }
 
+        public IEnumerable<int> ItemsPerPage { get; }
+
         public string SelectedPeriod { get; set; }
+
+        public int SelectedItemsPerPage { get; set; }
 
         public IReadOnlyDictionary<string, object> EditButtonAttributes => new Dictionary<string, object>() { { "title", "Edit" } };
         public IReadOnlyDictionary<string, object> DeleteButtonAttributes => new Dictionary<string, object>() { { "title", "Delete" } };
@@ -43,8 +47,11 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.notificationService = notificationService;
             this.dialogService = dialogService;
 
+            this.ItemsPerPage = new List<int> { 5, 8, 10, 50, 100 };
+            this.SelectedItemsPerPage = this.ItemsPerPage.First();
+
             this.Periods = new List<string> { "Last Month", "Current Month", "Custom" };
-            this.SelectedPeriod = this.Periods.Skip(1).First();
+            this.SelectedPeriod = this.Periods.ToArray()[1];
         }
 
         public async Task OnInitalializedAsync()
@@ -113,6 +120,11 @@ namespace PennyTracker.BlazorServer.ViewModels
                         break;
                     }
             }
+        }
+
+        public void OnItemsPerPageChanged(object selectedItem)
+        {
+            this.StateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private async Task OpenCreateExpenseDialog(
