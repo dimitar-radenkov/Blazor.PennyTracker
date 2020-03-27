@@ -7,7 +7,6 @@ namespace PennyTracker.UIAutomation.Tests
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-
         }
     }
 }
