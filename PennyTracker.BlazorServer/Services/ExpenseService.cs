@@ -50,7 +50,7 @@ namespace PennyTracker.BlazorServer.Services
             await this.httpClient.DeleteAsync($"{URL_BASE}/{id}");
         }
 
-        public async Task<IList<Expense>> GetRangeAsync(DateTime from, DateTime to)
+        public async Task<IEnumerable<Expense>> GetRangeAsync(DateTime from, DateTime to)
         {
             var response = await this.httpClient.GetStreamAsync($"{URL_BASE}?fromUnixTime={from.ToUnixTime()}&toUnixTime={to.ToUnixTime()}");
 

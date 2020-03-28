@@ -10,8 +10,8 @@ else
 
     <div>
         <RadzenButton Text="Add"
-                        Click="args => ViewModel.OnButtonAddClickAsync()"
-                        ButtonStyle="ButtonStyle.Primary" />
+                      Click="args => ViewModel.OnButtonAddClickAsync()"
+                      ButtonStyle="ButtonStyle.Primary"/>
     </div>
 
     <div class="d-flex align-items-center">
@@ -19,7 +19,7 @@ else
         <RadzenDropDown TValue="int"
                         Data="this.ViewModel.ItemsPerPage"
                         @bind-Value="this.ViewModel.SelectedItemsPerPage"
-                        Change="args => this.ViewModel.OnItemsPerPageChanged(args)" />
+                        Change="args => this.ViewModel.OnItemsPerPageChangedAsync(args)"/>
 
         <label style="margin-right:5px; margin-left:15px">Period</label>
         <RadzenDropDown TValue="string"
@@ -30,7 +30,10 @@ else
 
 </div>
 <div class="row">
-    <RadzenGrid Data="@this.ViewModel.Transactions" AllowSorting="true" AllowPaging="true" PageSize="this.ViewModel.SelectedItemsPerPage">
+    <RadzenGrid Data="@this.ViewModel.Transactions" 
+                AllowSorting="true" 
+                AllowPaging="true" 
+                PageSize="@this.ViewModel.SelectedItemsPerPage">
         <Columns>
             <RadzenGridColumn TItem="Expense"
                               Property="Category"
@@ -83,9 +86,13 @@ else
     [Inject]
     public IExpensesTableViewModel ViewModel { get; set; }
 
+    public void OnLoadData(object s)
+    {
+
+    }
+
     protected override Task OnInitializedAsync()
     {
-        this.ViewModel.StateChanged += (s, e) => this.StateHasChanged();
         return this.ViewModel.OnInitalializedAsync();
     }
 }

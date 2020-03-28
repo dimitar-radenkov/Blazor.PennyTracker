@@ -23,7 +23,7 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public event EventHandler StateChanged;
 
-        public IList<Expense> Transactions { get; set; }
+        public IEnumerable<Expense> Transactions { get; set; }
 
         public IEnumerable<string> Periods { get; }
 
@@ -86,9 +86,7 @@ namespace PennyTracker.BlazorServer.ViewModels
         public async Task OnButtonDeleteClickAsync(int id)
         {
             await this.expenseService.DeleteAsync(id);
-            var itemToRemove = this.Transactions.FirstOrDefault(x => x.Id == id);
-
-            this.Transactions.Remove(itemToRemove);
+            this.Transactions = this.Transactions.Where(x => x.Id != id).ToList();
         }
 
         public async Task OnPeriodChangedAsync(object args)
@@ -103,7 +101,6 @@ namespace PennyTracker.BlazorServer.ViewModels
                         var to = new DateTime(now.Year, now.Month, 1);
 
                         this.Transactions = await this.expenseService.GetRangeAsync(from, to);
-                        this.StateChanged.Invoke(this, EventArgs.Empty);
 
                         break;
                     }
@@ -115,16 +112,19 @@ namespace PennyTracker.BlazorServer.ViewModels
                         var to = now;
 
                         this.Transactions = await this.expenseService.GetRangeAsync(from, to);
-                        this.StateChanged.Invoke(this, EventArgs.Empty);
 
                         break;
                     }
             }
         }
 
-        public void OnItemsPerPageChanged(object selectedItem)
+        public async Task OnItemsPerPageChangedAsync(object args)
         {
-            this.StateChanged?.Invoke(this, EventArgs.Empty);
+            //this seems to be bug in DataGrid component.
+            //It needs to change underlaying collection to trigger rerendering
+            this.Transactions = this.Transactions.OrderBy(x => x.SpentDate).ToList();
+
+            await Task.FromResult(this.Transactions);
         }
 
         private async Task OpenCreateExpenseDialog(
@@ -148,7 +148,7 @@ namespace PennyTracker.BlazorServer.ViewModels
                     Duration = 4000
                 });
 
-                this.eventAggregator.GetEvent<UpdateStateEvent>().Publish();
+                //this.eventAggregator.GetEvent<UpdateStateEvent>().Publish();
             }
         }
     }
