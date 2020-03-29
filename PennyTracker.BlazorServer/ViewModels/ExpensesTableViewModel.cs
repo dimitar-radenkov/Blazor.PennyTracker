@@ -8,6 +8,7 @@ using BlazorDateRangePicker;
 using PennyTracker.BlazorServer.Events;
 using PennyTracker.BlazorServer.Pages;
 using PennyTracker.BlazorServer.Services;
+using PennyTracker.Shared.Extensions;
 using PennyTracker.Shared.Models;
 
 using Prism.Events;
@@ -55,10 +56,14 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.ItemsPerPage = new List<int> { 5, 8, 10, 50, 100 };
             this.SelectedItemsPerPage = this.ItemsPerPage.First();
 
+            var now = DateTime.UtcNow;
+            var dayOfWeek = DayOfWeek.Monday;
             this.Periods = new Dictionary<string, DateRange>
             {
-                { "Last Month", this.GetLastMonthRange() },
-                { "Current Month", this.GetCurrentMonthRange() },
+                { "Last Month", new DateRange{ Start = now.StartOfLastMonth(), End = now.StartOfMonth() } },
+                { "Last Week", new DateRange{ Start = now.StartOfLastWeek(dayOfWeek), End = now.EndOfLastWeek(dayOfWeek) } },
+                { "Current Week", new DateRange{ Start = now.StartOfWeek(dayOfWeek), End = now.EndOfWeek(dayOfWeek) } },
+                { "Current Month", new DateRange{ Start = now.StartOfMonth(), End = now.EndOfMonth() } },
             };
             this.SelectedPeriod = this.Periods.Last().Value;
         }
@@ -136,26 +141,6 @@ namespace PennyTracker.BlazorServer.ViewModels
                     Duration = 4000
                 });
             }
-        }
-
-        private DateRange GetLastMonthRange()
-        {
-            var now = DateTime.UtcNow;
-
-            var from = new DateTime(now.Year, now.AddMonths(-1).Month, 1);
-            var to = new DateTime(now.Year, now.Month, 1);
-
-            return new DateRange { Start = from, End = to };
-        }
-
-        private DateRange GetCurrentMonthRange()
-        {
-            var now = DateTime.UtcNow;
-
-            var from = new DateTime(now.Year, now.Month, 1);
-            var to = new DateTime(now.Year, now.AddMonths(1).Month, 1);
-
-            return new DateRange { Start = from, End = to };
         }
     }
 }
