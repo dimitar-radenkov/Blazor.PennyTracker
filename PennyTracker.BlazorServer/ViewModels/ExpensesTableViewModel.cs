@@ -12,7 +12,6 @@ using PennyTracker.Shared.Extensions;
 using PennyTracker.Shared.Models;
 
 using Prism.Events;
-
 using Radzen;
 
 namespace PennyTracker.BlazorServer.ViewModels
