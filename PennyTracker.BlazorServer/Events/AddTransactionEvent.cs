@@ -2,7 +2,7 @@
 
 namespace PennyTracker.BlazorServer.Events
 {
-    public class UpdateStateEvent : PubSubEvent
+    public class AddTransactionEvent : PubSubEvent
     {
     }
 }
