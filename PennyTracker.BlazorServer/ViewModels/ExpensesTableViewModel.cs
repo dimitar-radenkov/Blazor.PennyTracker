@@ -35,8 +35,14 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public int SelectedItemsPerPage { get; set; }
 
-        public IReadOnlyDictionary<string, object> EditButtonAttributes => new Dictionary<string, object>() { { "title", "Edit" } };
-        public IReadOnlyDictionary<string, object> DeleteButtonAttributes => new Dictionary<string, object>() { { "title", "Delete" } };
+        public IReadOnlyDictionary<string, object> EditButtonAttributes => new Dictionary<string, object>() 
+        { 
+            { "title", "Edit" },
+        };
+        public IReadOnlyDictionary<string, object> DeleteButtonAttributes => new Dictionary<string, object>() 
+        { 
+            { "title", "Delete" },
+        };
 
         public ExpensesTableViewModel(
             IEventAggregator eventAggregator,
@@ -52,7 +58,7 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.eventAggregator.GetEvent<AddTransactionEvent>()
                 .Subscribe(async () => await this.OnButtonAddClickAsync());
 
-            this.ItemsPerPage = new List<int> { 5, 8, 10, 50, 100 };
+            this.ItemsPerPage = new List<int> { 10, 25, 50, 100 };
             this.SelectedItemsPerPage = this.ItemsPerPage.First();
 
             var now = DateTime.UtcNow;
@@ -60,7 +66,7 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.Periods = new Dictionary<string, DateRange>
             {
                 { "Last Month", new DateRange{ Start = now.StartOfLastMonth(), End = now.StartOfMonth() } },
-                { "Last Week", new DateRange{ Start = now.StartOfLastWeek(dayOfWeek), End = now.EndOfLastWeek(dayOfWeek) } },
+                { "Last Week", new DateRange{ Start = now.StartOfLastWeek(dayOfWeek), End = now.StartOfWeek(dayOfWeek) } },
                 { "Current Week", new DateRange{ Start = now.StartOfWeek(dayOfWeek), End = now.EndOfWeek(dayOfWeek) } },
                 { "Current Month", new DateRange{ Start = now.StartOfMonth(), End = now.EndOfMonth() } },
             };

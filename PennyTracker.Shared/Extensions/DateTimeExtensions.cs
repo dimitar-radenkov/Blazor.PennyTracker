@@ -41,12 +41,6 @@ namespace PennyTracker.Shared.Extensions
             return dateTime.AddDays(diff).Date;
         }
 
-        public static DateTime EndOfLastWeek(this DateTime dateTime, DayOfWeek startOfWeek)
-        {
-            int diff = (DAYS_OF_WEEK + (dateTime.DayOfWeek - startOfWeek)) % DAYS_OF_WEEK;
-            return dateTime.AddDays(-1 * diff).Date.AddDays(DAYS_OF_WEEK);
-        }
-
         public static DateTime StartOfMonth(this DateTime dateTime) => 
             new DateTime(dateTime.Year, dateTime.Month, 1);
 
