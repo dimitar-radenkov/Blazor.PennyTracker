@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using BlazorDateRangePicker;
+
 using PennyTracker.BlazorServer.Events;
 using PennyTracker.BlazorServer.Pages;
 using PennyTracker.BlazorServer.Services;
@@ -21,15 +23,15 @@ namespace PennyTracker.BlazorServer.ViewModels
         private readonly NotificationService notificationService;
         private readonly IDialogService dialogService;
 
-        public event EventHandler StateChanged;
+        public event EventHandler RequestedUpdateState;
 
         public IEnumerable<Expense> Transactions { get; set; }
 
-        public IEnumerable<string> Periods { get; }
+        public Dictionary<string, DateRange> Periods { get; }
 
         public IEnumerable<int> ItemsPerPage { get; }
 
-        public string SelectedPeriod { get; set; }
+        public DateRange SelectedPeriod { get; set; }
 
         public int SelectedItemsPerPage { get; set; }
 
@@ -47,16 +49,23 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.notificationService = notificationService;
             this.dialogService = dialogService;
 
+            this.eventAggregator.GetEvent<AddTransactionEvent>()
+                .Subscribe(async () => await this.OnButtonAddClickAsync());
+
             this.ItemsPerPage = new List<int> { 5, 8, 10, 50, 100 };
             this.SelectedItemsPerPage = this.ItemsPerPage.First();
 
-            this.Periods = new List<string> { "Last Month", "Current Month", "Custom" };
-            this.SelectedPeriod = this.Periods.ToArray()[1];
+            this.Periods = new Dictionary<string, DateRange>
+            {
+                { "Last Month", this.GetLastMonthRange() },
+                { "Current Month", this.GetCurrentMonthRange() },
+            };
+            this.SelectedPeriod = this.Periods.Last().Value;
         }
 
         public async Task OnInitalializedAsync()
         {
-            await this.OnPeriodChangedAsync(null);
+            await this.OnPeriodChangedAsync(this.SelectedPeriod);
         }
 
         public async Task OnButtonAddClickAsync()
@@ -67,7 +76,9 @@ namespace PennyTracker.BlazorServer.ViewModels
                 messageSummary: "Create Expense", 
                 messageDetail: "Added Successfully");
 
-            await this.OnPeriodChangedAsync(null);
+            await this.OnPeriodChangedAsync(this.SelectedPeriod);
+
+            this.RequestedUpdateState?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task OnButtonEditClickAsync(int id)
@@ -80,49 +91,26 @@ namespace PennyTracker.BlazorServer.ViewModels
                 messageSummary: "Update Expense",
                 messageDetail: "Updated Successfully");
 
-            await this.OnPeriodChangedAsync(null);
+            await this.OnPeriodChangedAsync(this.SelectedPeriod);
         }
 
         public async Task OnButtonDeleteClickAsync(int id)
         {
             await this.expenseService.DeleteAsync(id);
-            this.Transactions = this.Transactions.Where(x => x.Id != id).ToList();
+            this.Transactions = this.Transactions.Where(x => x.Id != id);
         }
 
-        public async Task OnPeriodChangedAsync(object args)
+        public async Task OnPeriodChangedAsync(DateRange range)
         {
-            switch (this.SelectedPeriod)
-            {
-                case "Last Month":
-                    {
-                        var now = DateTime.UtcNow;
-
-                        var from = new DateTime(now.Year, now.AddMonths(-1).Month, 1);
-                        var to = new DateTime(now.Year, now.Month, 1);
-
-                        this.Transactions = await this.expenseService.GetRangeAsync(from, to);
-
-                        break;
-                    }
-                case "Current Month":
-                    {
-                        var now = DateTime.UtcNow;
-
-                        var from = new DateTime(now.Year, now.Month, 1);
-                        var to = now;
-
-                        this.Transactions = await this.expenseService.GetRangeAsync(from, to);
-
-                        break;
-                    }
-            }
+            this.Transactions = await this.expenseService.GetRangeAsync(range.Start.UtcDateTime, range.End.UtcDateTime);
+            this.SelectedPeriod = range;
         }
 
         public async Task OnItemsPerPageChangedAsync(object args)
         {
-            //this seems to be bug in DataGrid component.
+            //This seems to be bug in DataGrid component.
             //It needs to change underlaying collection to trigger rerendering
-            this.Transactions = this.Transactions.OrderBy(x => x.SpentDate).ToList();
+            this.Transactions = this.Transactions.OrderBy(x => x.SpentDate);
 
             await Task.FromResult(this.Transactions);
         }
@@ -147,9 +135,27 @@ namespace PennyTracker.BlazorServer.ViewModels
                     Detail = messageDetail,
                     Duration = 4000
                 });
-
-                //this.eventAggregator.GetEvent<UpdateStateEvent>().Publish();
             }
+        }
+
+        private DateRange GetLastMonthRange()
+        {
+            var now = DateTime.UtcNow;
+
+            var from = new DateTime(now.Year, now.AddMonths(-1).Month, 1);
+            var to = new DateTime(now.Year, now.Month, 1);
+
+            return new DateRange { Start = from, End = to };
+        }
+
+        private DateRange GetCurrentMonthRange()
+        {
+            var now = DateTime.UtcNow;
+
+            var from = new DateTime(now.Year, now.Month, 1);
+            var to = new DateTime(now.Year, now.AddMonths(1).Month, 1);
+
+            return new DateRange { Start = from, End = to };
         }
     }
 }
