@@ -40,7 +40,7 @@ namespace PennyTracker.BlazorServer.Tests
             var expenseServiceMock = new Mock<IExpenseService>();
             var dialogServiceMock = new Mock<IDialogService>();
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var vm = new CreateExpenseComponentViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
             vm.Model = this.newExpense;
 
             //assert
@@ -55,7 +55,7 @@ namespace PennyTracker.BlazorServer.Tests
             var expenseServiceMock = new Mock<IExpenseService>();
             var dialogServiceMock = new Mock<IDialogService>();
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var vm = new CreateExpenseComponentViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
             vm.Model = this.updateExpense;
 
             //assert
@@ -81,7 +81,7 @@ namespace PennyTracker.BlazorServer.Tests
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var vm = new CreateExpenseComponentViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
             vm.Model = this.newExpense;
 
             //act
@@ -111,7 +111,7 @@ namespace PennyTracker.BlazorServer.Tests
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var vm = new CreateExpenseComponentViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
             vm.Model = this.updateExpense;
 
             //act
@@ -137,7 +137,7 @@ namespace PennyTracker.BlazorServer.Tests
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var vm = new CreateExpenseComponentViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
 
             //act
             vm.OnButtonCancelClicked();

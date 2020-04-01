@@ -45,16 +45,16 @@ namespace PennyTracker.BlazorServer
             {
                 client.BaseAddress = new Uri("https://localhost:44326/");
             });
-            //services.AddScoped<IExpenseService, ExpenseService>();
 
             services.AddScoped<DialogService>();
             services.AddScoped<IDialogService, AppDialogService>();
             services.AddScoped<IEventAggregator, EventAggregator>();
 
             services.AddScoped<NotificationService>();
-            services.AddScoped<IExpensesTableViewModel, ExpensesTableViewModel>();
-            services.AddScoped<ICreateExpenseViewModel, CreateExpenseViewModel>();
-            services.AddScoped<IExpenseChartViewModel, ExpenseChartViewModel>();
+            services.AddScoped<ITransactionsComponentViewModel, TransactionsComponentViewModel>();
+            services.AddScoped<ICreateExpenseComponentViewModel, CreateExpenseComponentViewModel>();
+            services.AddScoped<IReportPageViewModel, ReportPageViewModel>();
+            services.AddScoped<IPeriodComponentViewModel, PeriodComponentViewModel>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

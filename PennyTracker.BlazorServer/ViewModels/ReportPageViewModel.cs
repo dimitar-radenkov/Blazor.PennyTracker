@@ -3,26 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using BlazorDateRangePicker;
+
 using PennyTracker.BlazorServer.Services;
-using PennyTracker.Shared.Models;
+
+using Prism.Events;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
-    public class ExpenseChartViewModel : IExpenseChartViewModel
+    public class ReportPageViewModel : IReportPageViewModel
     {
+        private readonly IEventAggregator eventAggregator;
         private readonly IExpenseService expenseService;
+
+        private DateRange currentRange;
+
+        public event EventHandler RequestedUpdateState;
 
         public IEnumerable<AmountsByCategory> ExpensesByCategory { get; private set; }
 
-        public ExpenseChartViewModel(IExpenseService expenseService)
+        public ReportPageViewModel(
+            IEventAggregator eventAggregator,
+            IExpenseService expenseService)
         {
+            this.eventAggregator = eventAggregator;
             this.expenseService = expenseService;
+
+            this.eventAggregator.GetEvent<DateTimeRangeChangedEvent>()
+                .Subscribe(async (dataRange) =>
+                {
+                    this.currentRange = dataRange;
+                    await this.UpdateData(dataRange.Start.UtcDateTime, dataRange.End.UtcDateTime);
+                });
         }
 
         public async Task OnInitalializedAsync()
         {
-            //var expenses = await this.expenseService.GetRangeAsync();
-            var expenses = Enumerable.Empty<Expense>();
+            //await this.UpdateData(
+            //    this.currentRange.Start.UtcDateTime,
+            //    this.currentRange.End.UtcDateTime);
+        }
+
+        private async Task UpdateData(DateTime start, DateTime end)
+        {
+            var expenses = await this.expenseService.GetRangeAsync(start, end);
+
             var totalSum = expenses.Sum(x => x.Amount);
 
             this.ExpensesByCategory = expenses.GroupBy(
@@ -41,6 +66,8 @@ namespace PennyTracker.BlazorServer.ViewModels
                     })
                     .OrderByDescending(x => x.Amount)
                     .ToList();
+
+            this.RequestedUpdateState?.Invoke(this, EventArgs.Empty);
         }
     }
 

@@ -4,7 +4,7 @@ using PennyTracker.Shared.Models;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
-    public interface ICreateExpenseViewModel
+    public interface ICreateExpenseComponentViewModel
     {
         Expense Model { get; set; }
         Task OnButtonSaveClickAsync();

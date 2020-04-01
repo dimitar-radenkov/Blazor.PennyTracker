@@ -1,6 +1,4 @@
-﻿@using BlazorDateRangePicker; 
-
-@if (this.ViewModel.SelectedPeriod == null)
+﻿@if (this.ViewModel.Transactions == null)
 {
     <h3>Loading...</h3>
     <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
@@ -18,15 +16,7 @@ else
                         Style="width:100px"/>
     </div>
 
-    <div class="d-flex align-items-center">
-        <label style="margin-right:5px; margin-left:15px">Period</label>
-        <DateRangePicker Ranges="this.ViewModel.Periods"
-                         FirstDayOfWeek="DayOfWeek.Monday"
-                         Opens="SideType.Left"
-                         StartDate="this.ViewModel.SelectedPeriod.Start"
-                         EndDate="this.ViewModel.SelectedPeriod.End"
-                         OnRangeSelect="args => this.ViewModel.OnPeriodChangedAsync(args)"/>
-    </div>
+    <PeriodComponent/>
 </div>
 <div class="row">
     <RadzenGrid Data="@this.ViewModel.Transactions"
@@ -40,7 +30,7 @@ else
                               Width="120px">
                 <Template Context="ctx">
                     <div class="">
-                        <CategoryIcon Category="ctx.Category" />
+                        <IconComponent Category="ctx.Category" />
                         <RadzenLabel Text="@ctx.Category.ToString()" Style="margin-left:5px" />
                     </div>
                 </Template>
@@ -83,11 +73,13 @@ else
 @code
 {
     [Inject]
-    public IExpensesTableViewModel ViewModel { get; set; }
+    public ITransactionsComponentViewModel ViewModel { get; set; }
 
     protected override Task OnInitializedAsync()
     {
         this.ViewModel.RequestedUpdateState += (s, e) => this.StateHasChanged();
-        return this.ViewModel.OnInitalializedAsync();
+        this.ViewModel.OnInitalializedAsync();
+
+        return base.OnInitializedAsync();
     }
 }

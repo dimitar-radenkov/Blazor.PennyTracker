@@ -5,14 +5,14 @@ using PennyTracker.Shared.Models;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
-    public class CreateExpenseViewModel : ICreateExpenseViewModel
+    public class CreateExpenseComponentViewModel : ICreateExpenseComponentViewModel
     {
         private readonly IDialogService dialogService;
         private readonly IExpenseService expenseService;
 
         public Expense Model { get; set; }
     
-        public CreateExpenseViewModel(IDialogService dialogService, IExpenseService expenseService)
+        public CreateExpenseComponentViewModel(IDialogService dialogService, IExpenseService expenseService)
         {
             this.dialogService = dialogService;
             this.expenseService = expenseService;
