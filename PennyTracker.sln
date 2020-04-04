@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.Api", "PennyTr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PennyTracker.Shared", "PennyTracker.Shared\PennyTracker.Shared.csproj", "{6E4E566C-9B2A-4670-93E1-53E9B0DEC315}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PennyTracker.Selenium.Tests", "PennyTracker.Selenium.Tests\PennyTracker.Selenium.Tests.csproj", "{59FDF963-B787-4A75-A5D0-97B8C10FC134}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6E4E566C-9B2A-4670-93E1-53E9B0DEC315}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E4E566C-9B2A-4670-93E1-53E9B0DEC315}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E4E566C-9B2A-4670-93E1-53E9B0DEC315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59FDF963-B787-4A75-A5D0-97B8C10FC134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59FDF963-B787-4A75-A5D0-97B8C10FC134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59FDF963-B787-4A75-A5D0-97B8C10FC134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59FDF963-B787-4A75-A5D0-97B8C10FC134}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

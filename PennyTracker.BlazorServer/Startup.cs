@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+
+using BlazorDateRangePicker;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +31,14 @@ namespace PennyTracker.BlazorServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDateRangePicker(config =>
+            {
+                config.Attributes = new Dictionary<string, object>
+                {
+                    { "class", "form-control form-control-sm" }
+                };
+            });
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddHttpClient<IExpenseService, ExpenseService>(client =>
