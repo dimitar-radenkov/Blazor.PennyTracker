@@ -4,28 +4,23 @@
 
 @if (this.ViewModel?.ExpensesByCategory == null)
 {
+<div>
     <h3>Loading...</h3>
     <RadzenProgressBar Style="background-color:red" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+</div>
 }
 else
 {
-    <div class="row d-flex justify-content-end">
-        <PeriodComponent/>
-    </div>
-
     foreach (var item in this.ViewModel.ExpensesByCategory)
     {
         <h6>@item.Category</h6>
         <div class="row">
             <div class="col-6">
                 <RadzenProgressBar Value="item.Percentage" />
-                <RadzenProgressBar Value="42"></RadzenProgressBar>
             </div>
             <div class="col-3">@item.Amount</div>
         </div>
-
     }
-
 }
 
 @code

@@ -1,28 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using BlazorDateRangePicker;
 
+using PennyTracker.BlazorServer.Events;
 using PennyTracker.Shared.Extensions;
 
 using Prism.Events;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
-    public interface IPeriodComponentViewModel
-    {
-        public static readonly DateRange DefaultPeriod = new DateRange 
-        {
-            Start = DateTime.UtcNow.StartOfMonth(),
-            End = DateTime.UtcNow.EndOfMonth()
-        };
-
-        Dictionary<string, DateRange> Periods { get; }
-        DateRange SelectedPeriod { get; }
-
-        void OnPeriodChanged(DateRange selectedItem);
-    }
-
     public class PeriodComponentViewModel : IPeriodComponentViewModel
     {
         private readonly IEventAggregator eventAggregator;
@@ -39,13 +27,13 @@ namespace PennyTracker.BlazorServer.ViewModels
             var dayOfWeek = DayOfWeek.Monday;
             this.Periods = new Dictionary<string, DateRange>
             {
-                { "Last Month", new DateRange{ Start = now.StartOfLastMonth(), End = now.StartOfMonth() } },
-                { "Last Week", new DateRange{ Start = now.StartOfLastWeek(dayOfWeek), End = now.StartOfWeek(dayOfWeek) } },
-                { "Current Week", new DateRange{ Start = now.StartOfWeek(dayOfWeek), End = now.EndOfWeek(dayOfWeek) } },
-                { "Current Month",  IPeriodComponentViewModel.DefaultPeriod }
+                { "Last Month", new DateRange { Start = now.StartOfLastMonth(), End = now.StartOfMonth() } },
+                { "Last Week", new DateRange { Start = now.StartOfLastWeek(dayOfWeek), End = now.StartOfWeek(dayOfWeek) } },
+                { "Current Week", new DateRange { Start = now.StartOfWeek(dayOfWeek), End = now.EndOfWeek(dayOfWeek) } },
+                { "Current Month",  ApplicationState.DefaultDateRange }
             };
-            this.SelectedPeriod = IPeriodComponentViewModel.DefaultPeriod;
-            this.eventAggregator.GetEvent<DateTimeRangeChangedEvent>().Publish(this.SelectedPeriod);
+
+            this.OnPeriodChanged(this.Periods.Last().Value);
         }
 
         public void OnPeriodChanged(DateRange selectedItem)
@@ -53,10 +41,5 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.SelectedPeriod = selectedItem;
             this.eventAggregator.GetEvent<DateTimeRangeChangedEvent>().Publish(selectedItem);
         }
-    }
-
-    public class DateTimeRangeChangedEvent : PubSubEvent<DateRange>
-    {
-
     }
 }

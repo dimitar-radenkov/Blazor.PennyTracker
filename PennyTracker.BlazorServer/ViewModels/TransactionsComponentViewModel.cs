@@ -18,6 +18,7 @@ namespace PennyTracker.BlazorServer.ViewModels
 {
     public class TransactionsComponentViewModel : ITransactionsComponentViewModel
     {
+        private readonly ApplicationState applicationState;
         private readonly IEventAggregator eventAggregator;
         private readonly IExpenseService expenseService;
         private readonly NotificationService notificationService;
@@ -46,11 +47,13 @@ namespace PennyTracker.BlazorServer.ViewModels
         };
 
         public TransactionsComponentViewModel(
+            ApplicationState applicationState,
             IEventAggregator eventAggregator,
             IExpenseService expenseService, 
             NotificationService notificationService,
             IDialogService dialogService)
         {
+            this.applicationState = applicationState;
             this.eventAggregator = eventAggregator;
             this.expenseService = expenseService;
             this.notificationService = notificationService;
@@ -72,11 +75,8 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public async Task OnInitalializedAsync()
         {
-            if (this.currentPeriod == null)
-            {
-                this.currentPeriod = IPeriodComponentViewModel.DefaultPeriod;
-                await this.OnPeriodChangedAsync(IPeriodComponentViewModel.DefaultPeriod);
-            }
+            this.currentPeriod = this.applicationState.SelectedDateRange;
+            await this.OnPeriodChangedAsync(this.applicationState.SelectedDateRange);         
         }
 
         public async Task OnButtonAddClickAsync()

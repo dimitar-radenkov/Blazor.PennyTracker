@@ -2,11 +2,12 @@
 {
     <h3>Loading...</h3>
     <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+
 }
 else
 {
 
-<div class="row d-flex justify-content-end">
+<div class="d-flex justify-content-end">
     <div class="d-flex align-items-center">
         <label style="margin-right:5px">Items per page</label>
         <RadzenDropDown TValue="int"
@@ -15,10 +16,8 @@ else
                         Change="args => this.ViewModel.OnItemsPerPageChangedAsync(args)"
                         Style="width:100px"/>
     </div>
-
-    <PeriodComponent/>
 </div>
-<div class="row">
+<div>
     <RadzenGrid Data="@this.ViewModel.Transactions"
                 AllowSorting="true" 
                 AllowPaging="true" 

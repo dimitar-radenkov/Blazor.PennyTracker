@@ -46,6 +46,9 @@ namespace PennyTracker.BlazorServer
                 client.BaseAddress = new Uri("https://localhost:44326/");
             });
 
+            
+
+            services.AddScoped<ApplicationState>();
             services.AddScoped<DialogService>();
             services.AddScoped<IDialogService, AppDialogService>();
             services.AddScoped<IEventAggregator, EventAggregator>();
