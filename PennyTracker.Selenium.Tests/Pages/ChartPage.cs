@@ -5,7 +5,7 @@ namespace PennyTracker.Selenium.Tests.Pages
 {
     public class ChartPage
     {
-        [FindsBy(How = How.XPath, Using = "//h3")]
+        [FindsBy(How = How.XPath, Using = "//a[@href = '/report']")]
         private IWebElement pageHeadline;
 
         public void Goto()

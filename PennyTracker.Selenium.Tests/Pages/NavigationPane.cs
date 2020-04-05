@@ -8,7 +8,7 @@ namespace PennyTracker.Selenium.Tests.Pages
         [FindsBy(How = How.PartialLinkText, Using = "Home")]
         private IWebElement homeLink;
 
-        [FindsBy(How = How.PartialLinkText, Using = "Chart")]
+        [FindsBy(How = How.PartialLinkText, Using = "Reports")]
         private IWebElement chartLink;
 
         public void GoToHome()
