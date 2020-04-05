@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
-
+using PennyTracker.BlazorServer.Events;
 using PennyTracker.BlazorServer.Services;
 using PennyTracker.Shared.Models;
+
+using Prism.Events;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
@@ -9,13 +11,18 @@ namespace PennyTracker.BlazorServer.ViewModels
     {
         private readonly IDialogService dialogService;
         private readonly IExpenseService expenseService;
+        private readonly IEventAggregator eventAggregator;
 
         public Expense Model { get; set; }
     
-        public CreateExpenseComponentViewModel(IDialogService dialogService, IExpenseService expenseService)
+        public CreateExpenseComponentViewModel(
+            IDialogService dialogService,
+            IExpenseService expenseService,
+            IEventAggregator eventAggregator)
         {
             this.dialogService = dialogService;
             this.expenseService = expenseService;
+            this.eventAggregator = eventAggregator;
         }
 
         public async Task OnButtonSaveClickAsync()
@@ -27,6 +34,8 @@ namespace PennyTracker.BlazorServer.ViewModels
                     this.Model.Amount,
                     this.Model.Category,
                     this.Model.SpentDate);
+
+                this.eventAggregator.GetEvent<TransactionAddedEvent>().Publish(this.Model);
             }
             else //edit
             {

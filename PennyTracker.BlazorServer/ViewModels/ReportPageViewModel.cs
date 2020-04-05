@@ -30,19 +30,21 @@ namespace PennyTracker.BlazorServer.ViewModels
             this.expenseService = expenseService;
 
             this.eventAggregator.GetEvent<DateTimeRangeChangedEvent>()
-                .Subscribe(async (dataRange) =>
-                {
-                    await this.UpdateData(dataRange.Start.UtcDateTime, dataRange.End.UtcDateTime);
-                });
+                .Subscribe(async (dataRange) => await this.UpdateData(
+                    dataRange.Start.UtcDateTime, 
+                    dataRange.End.UtcDateTime));
+
+            this.eventAggregator.GetEvent<TransactionAddedEvent>()
+                .Subscribe(async (_) => await this.UpdateData(
+                    this.applicationState.SelectedDateRange.Start.UtcDateTime, 
+                    this.applicationState.SelectedDateRange.End.UtcDateTime));
         }
 
         public async Task OnInitalializedAsync()
         {
-            var currentDateRange = this.applicationState.SelectedDateRange;
-
             await this.UpdateData(
-                currentDateRange.Start.UtcDateTime,
-                currentDateRange.End.UtcDateTime);
+                this.applicationState.SelectedDateRange.Start.UtcDateTime,
+                this.applicationState.SelectedDateRange.End.UtcDateTime);
         }
 
         private async Task UpdateData(DateTime start, DateTime end)
