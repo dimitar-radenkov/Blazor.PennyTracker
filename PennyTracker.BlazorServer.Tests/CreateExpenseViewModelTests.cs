@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
-
+using PennyTracker.BlazorServer.Events;
 using PennyTracker.BlazorServer.Services;
 using PennyTracker.BlazorServer.ViewModels;
 using PennyTracker.Shared.Models;
+using Prism.Events;
 
 namespace PennyTracker.BlazorServer.Tests
 {
@@ -39,8 +40,13 @@ namespace PennyTracker.BlazorServer.Tests
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
             var dialogServiceMock = new Mock<IDialogService>();
+            var eventAggregatorMock = new Mock<IEventAggregator>();
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var vm = new CreateExpenseComponentViewModel(
+                dialogServiceMock.Object, 
+                expenseServiceMock.Object, 
+                eventAggregatorMock.Object);
+
             vm.Model = this.newExpense;
 
             //assert
@@ -54,8 +60,12 @@ namespace PennyTracker.BlazorServer.Tests
             //arrange
             var expenseServiceMock = new Mock<IExpenseService>();
             var dialogServiceMock = new Mock<IDialogService>();
+            var eventAggregatorMock = new Mock<IEventAggregator>();
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var vm = new CreateExpenseComponentViewModel(
+                dialogServiceMock.Object,
+                expenseServiceMock.Object,
+                eventAggregatorMock.Object);
             vm.Model = this.updateExpense;
 
             //assert
@@ -81,7 +91,13 @@ namespace PennyTracker.BlazorServer.Tests
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var eventAggregatorMock = new Mock<IEventAggregator>();
+            eventAggregatorMock.Setup(x => x.GetEvent<TransactionAddedEvent>().Publish(null));
+
+            var vm = new CreateExpenseComponentViewModel(
+                dialogServiceMock.Object, 
+                expenseServiceMock.Object, 
+                eventAggregatorMock.Object);
             vm.Model = this.newExpense;
 
             //act
@@ -111,7 +127,12 @@ namespace PennyTracker.BlazorServer.Tests
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var eventAggregatorMock = new Mock<IEventAggregator>();
+
+            var vm = new CreateExpenseComponentViewModel(
+                dialogServiceMock.Object, 
+                expenseServiceMock.Object,
+                eventAggregatorMock.Object);
             vm.Model = this.updateExpense;
 
             //act
@@ -137,7 +158,12 @@ namespace PennyTracker.BlazorServer.Tests
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock.Setup(x => x.Close(It.IsAny<bool>()));
 
-            var vm = new CreateExpenseViewModel(dialogServiceMock.Object, expenseServiceMock.Object);
+            var eventAggregatorMock = new Mock<IEventAggregator>();
+
+            var vm = new CreateExpenseComponentViewModel(
+                dialogServiceMock.Object, 
+                expenseServiceMock.Object, 
+                eventAggregatorMock.Object);
 
             //act
             vm.OnButtonCancelClicked();

@@ -5,19 +5,20 @@ using System.Threading.Tasks;
 
 using BlazorDateRangePicker;
 
+using PennyTracker.BlazorServer.Components;
 using PennyTracker.BlazorServer.Events;
-using PennyTracker.BlazorServer.Pages;
 using PennyTracker.BlazorServer.Services;
-using PennyTracker.Shared.Extensions;
 using PennyTracker.Shared.Models;
 
 using Prism.Events;
+
 using Radzen;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
-    public class ExpensesTableViewModel : IExpensesTableViewModel
+    public class TransactionsComponentViewModel : ITransactionsComponentViewModel
     {
+        private readonly ApplicationState applicationState;
         private readonly IEventAggregator eventAggregator;
         private readonly IExpenseService expenseService;
         private readonly NotificationService notificationService;
@@ -27,11 +28,7 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public IEnumerable<Expense> Transactions { get; set; }
 
-        public Dictionary<string, DateRange> Periods { get; }
-
         public IEnumerable<int> ItemsPerPage { get; }
-
-        public DateRange SelectedPeriod { get; set; }
 
         public int SelectedItemsPerPage { get; set; }
 
@@ -44,38 +41,32 @@ namespace PennyTracker.BlazorServer.ViewModels
             { "title", "Delete" },
         };
 
-        public ExpensesTableViewModel(
+        public TransactionsComponentViewModel(
+            ApplicationState applicationState,
             IEventAggregator eventAggregator,
             IExpenseService expenseService, 
             NotificationService notificationService,
             IDialogService dialogService)
         {
+            this.applicationState = applicationState;
             this.eventAggregator = eventAggregator;
             this.expenseService = expenseService;
             this.notificationService = notificationService;
             this.dialogService = dialogService;
 
-            this.eventAggregator.GetEvent<AddTransactionEvent>()
+            this.eventAggregator.GetEvent<ButtonAddClickedEvent>()
                 .Subscribe(async () => await this.OnButtonAddClickAsync());
+
+            this.eventAggregator.GetEvent<DateTimeRangeChangedEvent>()
+                .Subscribe(async (dataRange) =>  await this.OnPeriodChangedAsync(dataRange));
 
             this.ItemsPerPage = new List<int> { 10, 25, 50, 100 };
             this.SelectedItemsPerPage = this.ItemsPerPage.First();
-
-            var now = DateTime.UtcNow;
-            var dayOfWeek = DayOfWeek.Monday;
-            this.Periods = new Dictionary<string, DateRange>
-            {
-                { "Last Month", new DateRange{ Start = now.StartOfLastMonth(), End = now.StartOfMonth() } },
-                { "Last Week", new DateRange{ Start = now.StartOfLastWeek(dayOfWeek), End = now.StartOfWeek(dayOfWeek) } },
-                { "Current Week", new DateRange{ Start = now.StartOfWeek(dayOfWeek), End = now.EndOfWeek(dayOfWeek) } },
-                { "Current Month", new DateRange{ Start = now.StartOfMonth(), End = now.EndOfMonth() } },
-            };
-            this.SelectedPeriod = this.Periods.Last().Value;
         }
 
         public async Task OnInitalializedAsync()
         {
-            await this.OnPeriodChangedAsync(this.SelectedPeriod);
+            await this.OnPeriodChangedAsync(this.applicationState.SelectedDateRange);         
         }
 
         public async Task OnButtonAddClickAsync()
@@ -86,9 +77,7 @@ namespace PennyTracker.BlazorServer.ViewModels
                 messageSummary: "Create Expense", 
                 messageDetail: "Added Successfully");
 
-            await this.OnPeriodChangedAsync(this.SelectedPeriod);
-
-            this.RequestedUpdateState?.Invoke(this, EventArgs.Empty);
+            await this.OnPeriodChangedAsync(this.applicationState.SelectedDateRange);
         }
 
         public async Task OnButtonEditClickAsync(int id)
@@ -101,19 +90,13 @@ namespace PennyTracker.BlazorServer.ViewModels
                 messageSummary: "Update Expense",
                 messageDetail: "Updated Successfully");
 
-            await this.OnPeriodChangedAsync(this.SelectedPeriod);
+            await this.OnPeriodChangedAsync(this.applicationState.SelectedDateRange);
         }
 
         public async Task OnButtonDeleteClickAsync(int id)
         {
             await this.expenseService.DeleteAsync(id);
             this.Transactions = this.Transactions.Where(x => x.Id != id);
-        }
-
-        public async Task OnPeriodChangedAsync(DateRange range)
-        {
-            this.Transactions = await this.expenseService.GetRangeAsync(range.Start.UtcDateTime, range.End.UtcDateTime);
-            this.SelectedPeriod = range;
         }
 
         public async Task OnItemsPerPageChangedAsync(object args)
@@ -125,13 +108,22 @@ namespace PennyTracker.BlazorServer.ViewModels
             await Task.FromResult(this.Transactions);
         }
 
+        public async Task OnPeriodChangedAsync(DateRange range)
+        {
+            this.Transactions = await this.expenseService.GetRangeAsync(
+                range.Start.UtcDateTime,
+                range.End.UtcDateTime);
+
+            this.RequestedUpdateState?.Invoke(this, EventArgs.Empty);
+        }
+
         private async Task OpenCreateExpenseDialog(
             string title, 
             Expense model, 
             string messageSummary, 
             string messageDetail)
         {
-            var result = await this.dialogService.OpenAsync<CreateExpense>(
+            var result = await this.dialogService.OpenAsync<CreateExpenseComponent>(
                 title: title,
                 parameters: new Dictionary<string, object> { { "model", model } },
                 options: new DialogOptions() { Width = "500px", Height = "auto", Left = "calc(50% - 250px)" });

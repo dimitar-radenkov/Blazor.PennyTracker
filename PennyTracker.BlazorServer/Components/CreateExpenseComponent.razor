@@ -1,6 +1,4 @@
-﻿
-
-<RadzenTemplateForm TItem="Expense" 
+﻿<RadzenTemplateForm TItem="Expense" 
                     Data="this.ViewModel.Model" 
                     Submit="async (x) => await this.ViewModel.OnButtonSaveClickAsync()">
     <div class="row" style="margin:5px">
@@ -32,11 +30,11 @@
             </div>
             <div class="row" style="height:20px">
                 <RadzenRequiredValidator Component="Amount" 
-                                            Text="Amount is required" />
+                                         Text="Amount is required" />
                 <RadzenNumericRangeValidator Component="Amount" 
-                                                Min="1" 
-                                                Max="1000000" 
-                                                Text="Amount must be between 1 and 1 000 000" />
+                                             Min="1" 
+                                             Max="1000000" 
+                                             Text="Amount must be between 1 and 1 000 000" />
             </div>
         </div>
     </div>
@@ -48,9 +46,9 @@
         <div class="col-md-8">
             <div class="row">
                 <RadzenTextBox Name="Description" 
-                                Placeholder="Description"
-                                @bind-Value="this.ViewModel.Model.Description"
-                                Style="width:100%;" />
+                               Placeholder="Description"
+                               @bind-Value="this.ViewModel.Model.Description"
+                               Style="width:100%;" />
             </div>
             <div class="row" style="height:20px">
                 <RadzenRequiredValidator Component="Description" 
@@ -77,15 +75,15 @@
     <div class="row" style="margin:5px">
         <div class="col-md-8 offset-4 d-flex justify-content-md-end">
             <RadzenButton Text="Save" 
-                            Icon="save" 
-                            ButtonType="ButtonType.Submit" 
-                            ButtonStyle="ButtonStyle.Primary " 
-                            Style="margin-right:5px"/>
+                          Icon="save" 
+                          ButtonType="ButtonType.Submit" 
+                          ButtonStyle="ButtonStyle.Primary " 
+                          Style="margin-right:5px"/>
 
             <RadzenButton Text="Cancel"
-                            Icon="cancel"
-                            Click="this.ViewModel.OnButtonCancelClicked"
-                            ButtonStyle="ButtonStyle.Secondary" />
+                          Icon="cancel"
+                          Click="this.ViewModel.OnButtonCancelClicked"
+                          ButtonStyle="ButtonStyle.Secondary" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -93,7 +91,7 @@
 @code
 {
     [Inject]
-    public ICreateExpenseViewModel ViewModel { get; set; }
+    public ICreateExpenseComponentViewModel ViewModel { get; set; }
 
     [Parameter]
     public Expense model { get; set; }

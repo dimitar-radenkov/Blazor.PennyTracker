@@ -1,0 +1,18 @@
+﻿@using BlazorDateRangePicker;
+
+<div class="d-flex align-items-center">
+    <label style="margin-right:5px; margin-left:15px">Period</label>
+    <DateRangePicker Ranges="this.ViewModel.Periods"
+                     FirstDayOfWeek="DayOfWeek.Monday"
+                     Opens="SideType.Left"
+                     StartDate="this.ViewModel.SelectedPeriod.Start"
+                     EndDate="this.ViewModel.SelectedPeriod.End"
+                     OnRangeSelect="args => this.ViewModel.OnPeriodChanged(args)" />
+</div>
+
+
+@code 
+{
+    [Inject]
+    public IPeriodComponentViewModel ViewModel { get; set; }
+}

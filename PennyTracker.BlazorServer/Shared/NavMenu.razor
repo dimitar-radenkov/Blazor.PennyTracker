@@ -13,7 +13,7 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <Radzen.Blazor.RadzenButton Text="Add" 
-                                    Click="args => this.eventAggegator.GetEvent<AddTransactionEvent>().Publish()"
+                                    Click="args => this.eventAggegator.GetEvent<ButtonAddClickedEvent>().Publish()"
                                     Style="border-radius:50px; margin:10px"/>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
