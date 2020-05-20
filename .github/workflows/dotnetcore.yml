@@ -3,7 +3,7 @@ name: .NET Core
 on: [push]
 
 jobs:
-  build_and_test:
+  build
 
     runs-on: windows-latest
 
@@ -15,6 +15,5 @@ jobs:
         dotnet-version: 3.1.100
     - name: Build with dotnet
       run: dotnet build --configuration Release
-    - name: Run Tests
-      run: dotnet test ./PennyTracker.BlazorServer.Tests/PennyTracker.BlazorServer.Tests.csproj
+
 
