@@ -16,5 +16,5 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
     - name: Run Tests
-      run: dotnet test ~/PennyTracker.BlazorServer.Tests/PennyTracker.BlazorServer.Tests.csproj
+      run: dotnet test PennyTracker.BlazorServer.Tests/PennyTracker.BlazorServer.Tests.csproj
 
