@@ -8,7 +8,7 @@ namespace PennyTracker.BlazorServer.ViewModels
     {
         event EventHandler RequestedUpdateState;
 
-        IEnumerable<AmountsByCategory> ExpensesByCategory { get; }
+        IEnumerable<CategoryAndAmount> ExpensesByCategory { get; }
 
         Task OnInitalializedAsync();
     }
