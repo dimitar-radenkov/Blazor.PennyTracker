@@ -7,6 +7,7 @@ using PennyTracker.BlazorServer.Events;
 using PennyTracker.BlazorServer.Services;
 
 using Prism.Events;
+using Radzen.Blazor.Rendering;
 
 namespace PennyTracker.BlazorServer.ViewModels
 {
@@ -18,7 +19,7 @@ namespace PennyTracker.BlazorServer.ViewModels
 
         public event EventHandler RequestedUpdateState;
 
-        public IEnumerable<AmountsByCategory> ExpensesByCategory { get; private set; }
+        public IEnumerable<CategoryAndAmount> ExpensesByCategory { get; private set; }
 
         public ReportPageViewModel(
             ApplicationState applicationState,
@@ -36,7 +37,7 @@ namespace PennyTracker.BlazorServer.ViewModels
 
             this.eventAggregator.GetEvent<TransactionAddedEvent>()
                 .Subscribe(async (_) => await this.UpdateData(
-                    this.applicationState.SelectedDateRange.Start.UtcDateTime, 
+                    this.applicationState.SelectedDateRange.Start.UtcDateTime,
                     this.applicationState.SelectedDateRange.End.UtcDateTime));
         }
 
@@ -59,12 +60,12 @@ namespace PennyTracker.BlazorServer.ViewModels
                     (key, g) =>
                     {
                         var groupSum = g.Sum();
+                        var percentage = Math.Round(Convert.ToDouble(groupSum / totalSum * 100), 2).ToString().PadLeft(5);
 
-                        return new AmountsByCategory
+                        return new CategoryAndAmount
                         {
-                            Category = key.ToString(),
+                            Category = key.ToString().PadRight(30),
                             Amount = groupSum,
-                            Percentage = Math.Round(Convert.ToDouble((groupSum / totalSum) * 100), 2)
                         };
                     })
                     .OrderByDescending(x => x.Amount)
@@ -74,10 +75,9 @@ namespace PennyTracker.BlazorServer.ViewModels
         }
     }
 
-    public class AmountsByCategory
+    public class CategoryAndAmount
     {
         public string Category { get; set; }
         public decimal Amount { get; set; }
-        public double Percentage { get; set; }
     }
 }
