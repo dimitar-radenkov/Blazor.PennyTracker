@@ -24,6 +24,7 @@ namespace PennyTracker.Api.Repository
                 .Where(x => x.SpentDate >= from)
                 .Where(x => x.SpentDate < to)
                 .AsNoTracking()
+                .OrderByDescending(x => x.SpentDate)
                 .ToListAsync();
 
         public async Task<Expense> GetAsync(int id) => 
